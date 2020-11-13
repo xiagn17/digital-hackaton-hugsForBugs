@@ -15,7 +15,9 @@ router.post('/me', (req, res, next) => {
 router.post('/logout', (req, res, next) => {
     req.logout();
     req.session.destroy((err) => {
-        res.redirect('/');
+        res.status(200).json({
+            success: true
+        })
     });});
 
 module.exports = router;
