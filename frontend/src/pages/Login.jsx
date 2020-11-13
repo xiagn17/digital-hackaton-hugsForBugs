@@ -48,6 +48,18 @@ export default function Login() {
     const classes = useStyles();
     const { handleSubmit, control } = useForm();
 
+    // это вынести в action стейта нужно
+    const signIn = async(data) => {
+        const remoteData = await fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        console.log(remoteData);
+    }
+
     if (user) {
         return <Redirect to={routes.home.path} />;
     }
@@ -55,16 +67,16 @@ export default function Login() {
     return (
         <Page>
             <div className={classes.formWrapper}>
-                <form className={classes.form} onSubmit={handleSubmit(setUser)}>
+                <form className={classes.form} onSubmit={handleSubmit(signIn)}>
                     <Controller
                         as={TextField}
                         variant="outlined"
                         margin="normal"
                         fullWidth
-                        id="fullName"
+                        id="loginId"
                         // label="Ваше имя"
                         placeholder="Ваше имя"
-                        name="name"
+                        name="fullName"
                         autoFocus
                         control={control}
                         required
