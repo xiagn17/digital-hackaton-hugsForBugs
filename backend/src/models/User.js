@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 const { Schema, SchemaTypes } = mongoose;
 
+// todo перенести в config
+const ROLE_USER = 'USER';
+
 const UserSchema = new Schema({
     fullName: SchemaTypes.String,
     groupId: SchemaTypes.String,
-    role: SchemaTypes.String
+    role: { type: String, default: ROLE_USER }
 });
 
 UserSchema.options.toJSON = {

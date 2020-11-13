@@ -1,5 +1,3 @@
-const ADMIN = 'ADMIN';
-const USER = 'USER';
 
 class UserService {
     constructor(userModel) {
@@ -9,7 +7,7 @@ class UserService {
     async createUser(data) {
         const userDTO = {
             ...data,
-            role: USER
+            role: config.default.roles.USER
         };
         return this.userModel.create(userDTO);
     }
@@ -17,7 +15,7 @@ class UserService {
     createAdmin(data) {
         const userDTO = {
             ...data,
-            role: ADMIN
+            role: config.default.roles.ADMIN
         };
         return this.userModel.create(userDTO);
     }

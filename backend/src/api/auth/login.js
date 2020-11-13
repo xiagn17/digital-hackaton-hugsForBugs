@@ -1,7 +1,7 @@
 
 const login = (req, res, next) => {
     console.log('logged user!', req.user);
-    res.sendStatus(200);
+    res.send(req.user);
 };
 
 module.exports = login;
