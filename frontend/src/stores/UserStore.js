@@ -1,8 +1,10 @@
-import { makeObservable, observable, computed, action } from "mobx"
+import { makeObservable, observable, computed, action } from 'mobx';
+import { sendHttpRequest } from '../utils/sendHttpRequest';
+import { API_LOGIN, API_ME } from '../const/API_URL';
 
 class UserStore {
     constructor() {
-        this.user = null;
+        this._user = null;
 
         makeObservable(this, {
             _user: observable,
@@ -11,21 +13,32 @@ class UserStore {
 
             login: action,
             logout: action,
-        })
+        });
     }
 
     get user() {
-        return this.user;
+        return this._user;
     }
 
-    login(user) {
-        this._user = user;
+    setUser(userData) {
+        this._user = userData;
+    }
+
+    async login(user) {
+        const userData = await sendHttpRequest({
+            url: API_LOGIN,
+            data: user,
+            method: 'POST',
+        });
+
+        if (userData) {
+            this._user = userData;
+        }
     }
 
     logout() {
-        this._user = null
+        this._user = null;
     }
 }
 
-
-export default UserStore;
+export default new UserStore();

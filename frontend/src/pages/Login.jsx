@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Page from '../components/Page';
 import { Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -6,6 +6,9 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form';
 import routes from '../const/Routes';
+import { UserContext } from '../context/UserContext';
+import { API_ME } from '../const/API_URL';
+import { sendHttpRequest } from '../utils/sendHttpRequest';
 
 const useStyles = makeStyles((theme) => ({
     formWrapper: {
@@ -43,32 +46,18 @@ const useStyles = makeStyles((theme) => ({
     input: {},
 }));
 
-export default function Login() {
-    const [user, setUser] = useState(null);
+const Login = () => {
+    const {
+        state: { user },
+        actions: { onLogin },
+    } = useContext(UserContext);
+
     const classes = useStyles();
     const { handleSubmit, control } = useForm();
 
-    // при старте приложухи опрашивает бэкенд по текущей сессии. если еще не истекла - сервак отсылает обьект юзера
-    useEffect(async () => {
-        const data = await fetch('/api/auth/me', {method: 'POST'})
-        try {
-            const loginData = await data.json();
-            console.log(loginData);
-        } catch (e) {
-            console.log(data, e);
-        }
-    }, []);
-    // это вынести в action стейта нужно
-    const signIn = async(data) => {
-        const remoteData = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        console.log(remoteData);
-    }
+    const handleLogin = (userData) => {
+        onLogin({ data: userData });
+    };
 
     if (user) {
         return <Redirect to={routes.home.path} />;
@@ -77,14 +66,13 @@ export default function Login() {
     return (
         <Page>
             <div className={classes.formWrapper}>
-                <form className={classes.form} onSubmit={handleSubmit(signIn)}>
+                <form className={classes.form} onSubmit={handleSubmit(handleLogin)}>
                     <Controller
                         as={TextField}
                         variant="outlined"
                         margin="normal"
                         fullWidth
                         id="loginId"
-                        // label="Ваше имя"
                         placeholder="Ваше имя"
                         name="fullName"
                         autoFocus
@@ -99,7 +87,6 @@ export default function Login() {
                         margin="normal"
                         fullWidth
                         name="groupId"
-                        // label="В какой вы гурппе"
                         placeholder="В какой вы гурппе"
                         type="number"
                         id="groupId"
@@ -121,4 +108,6 @@ export default function Login() {
             </div>
         </Page>
     );
-}
+};
+
+export default Login;

@@ -65,4 +65,4 @@ class TaskStore {
     }
 }
 
-export default TaskStore;
+export default new TaskStore();
