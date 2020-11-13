@@ -1,10 +1,30 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import Page from '../components/Page';
 
-export default function Home() {
+const useStyles = makeStyles((theme) => ({
+    dashboardWrapper: {
+        backgroundColor: '#F3F3F3',
+        height: '100%',
+        padding: 16,
+    },
+}));
+
+const DashboardHeader = () => {
     return (
-        <Page>
-            <h1>Home</h1>
+        <>
+            <Typography>Практическое задание 1/2</Typography>
+        </>
+    );
+};
+
+export default function Home() {
+    const classes = useStyles();
+
+    return (
+        <Page headerContent={<DashboardHeader />}>
+            <div className={classes.dashboardWrapper}></div>
         </Page>
     );
 }
