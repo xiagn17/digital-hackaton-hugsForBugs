@@ -1,20 +1,14 @@
-import styled from 'styled-components';
-
-const AppDiv = styled.div`
-position: relative;
-background: #fafafa;
-height: 100vh;
-width: 100vw;
-`;
-
-
+import React from 'react';
+import Router from '../components/Router';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {
-  return (
-      <AppDiv>
-          App
-      </AppDiv>
-  );
+    return (
+        <>
+            <CssBaseline />
+            <Router />
+        </>
+    );
 }
 
 export default App;
