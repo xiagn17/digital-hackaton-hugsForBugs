@@ -26,8 +26,8 @@ class UserService {
         return this.userModel.findById(id);
     }
 
-    async signIn({ fullName, groupNumber }) {
-        return this.userModel.findOne({ fullName, groupNumber });
+    async signIn({ fullName, groupId }) {
+        return this.userModel.findOne({ fullName, groupId });
     }
 }
 

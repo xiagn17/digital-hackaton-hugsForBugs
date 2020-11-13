@@ -5,15 +5,15 @@ module.exports = async () => {
     mongoose.connection.once('open', () => {
         UserService.createUser({
             fullName: 'Михаил Михалыч',
-            groupNumber: '12345678'
+            groupId: '12345678'
         });
         UserService.createUser({
             fullName: 'Алексей Алексыч',
-            groupNumber: '87654321'
+            groupId: '87654321'
         });
         UserService.createAdmin({
             fullName: 'admin',
-            groupNumber: 'admin'
+            groupId: 'admin'
         });
         console.log('MongoDB connected!')
     });

@@ -16,11 +16,11 @@ passport.deserializeUser(async(id, done) => {
 
 const localStrategy = new LocalStrategy({
         usernameField: 'fullName',
-        passwordField: 'groupNumber'
+        passwordField: 'groupId'
     },
-    async (fullName, groupNumber, done) => {
-        console.log(fullName, groupNumber);
-        const userDTO = await UserService.signIn({ fullName, groupNumber });
+    async (fullName, groupId, done) => {
+        console.log(fullName, groupId);
+        const userDTO = await UserService.signIn({ fullName, groupId });
         if (!userDTO) return done(null, false);
         return done(null, userDTO);
     }

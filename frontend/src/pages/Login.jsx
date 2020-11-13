@@ -61,7 +61,7 @@ export default function Login() {
                         variant="outlined"
                         margin="normal"
                         fullWidth
-                        id="loginId"
+                        id="fullName"
                         // label="Ваше имя"
                         placeholder="Ваше имя"
                         name="name"

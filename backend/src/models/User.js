@@ -3,7 +3,7 @@ const { Schema, SchemaTypes } = mongoose;
 
 const UserSchema = new Schema({
     fullName: SchemaTypes.String,
-    groupNumber: SchemaTypes.String,
+    groupId: SchemaTypes.String,
     role: SchemaTypes.String
 });
 
