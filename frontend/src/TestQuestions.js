@@ -1,4 +1,4 @@
-const data = [
+const TestQuestions = [
     {
         id: 1,
         question: 'Как расшифровывается аббревиатура IED?',
@@ -376,4 +376,4 @@ const data = [
     },
 ];
 
-export default data;
+export default TestQuestions;
