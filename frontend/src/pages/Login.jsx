@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Page from '../components/Page';
 import { Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -48,9 +48,19 @@ export default function Login() {
     const classes = useStyles();
     const { handleSubmit, control } = useForm();
 
+    // при старте приложухи опрашивает бэкенд по текущей сессии. если еще не истекла - сервак отсылает обьект юзера
+    useEffect(async () => {
+        const data = await fetch('/api/auth/me', {method: 'POST'})
+        try {
+            const loginData = await data.json();
+            console.log(loginData);
+        } catch (e) {
+            console.log(data, e);
+        }
+    }, []);
     // это вынести в action стейта нужно
     const signIn = async(data) => {
-        const remoteData = await fetch('/auth/login', {
+        const remoteData = await fetch('/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
