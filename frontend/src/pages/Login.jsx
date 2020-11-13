@@ -30,6 +30,11 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
+        backgroundColor: 'white',
+        color: '#2A5EA1',
+        '&:hover': {
+            color: 'white',
+        },
     },
     textField: {
         backgroundColor: 'white',
