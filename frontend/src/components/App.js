@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from '../components/Router';
+import Router from './Router';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {

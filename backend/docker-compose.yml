@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - target: 27017
+        published: 27018
+        protocol: tcp
+        mode: host
+

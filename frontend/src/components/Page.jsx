@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LogoImg from '../assets/imgs/logo.png';
 
-import ErrorBoundary from '../components/ErrorBoundary';
+import ErrorBoundary from './ErrorBoundary';
 
 const HEADER_HEIGHT= 70;
 

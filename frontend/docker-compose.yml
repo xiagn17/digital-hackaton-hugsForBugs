@@ -3,7 +3,7 @@ version: "3.7"
 services:
   frontend:
     container_name: hugs_frontend
-    build: .
+    build: ..
     restart: always
     ports:
       - 3000:3000
