@@ -4,6 +4,8 @@ import LogoImg from '../assets/imgs/logo.png';
 
 import ErrorBoundary from '../components/ErrorBoundary';
 
+const HEADER_HEIGHT= 70;
+
 const useStyles = makeStyles((theme) => ({
     header: {
         display: 'flex',
@@ -17,13 +19,18 @@ const useStyles = makeStyles((theme) => ({
         width: 184,
         height: 54
     },
-    main: {},
-    wrapper: {},
+    main: {
+        height: `calc(100% - ${HEADER_HEIGHT}px)`
+    },
+    wrapper: {
+        height: '100%'
+    },
 }));
 
 export default function Page(props) {
     const { children } = props;
     const classes = useStyles();
+
     return (
         <ErrorBoundary>
             <header className={classes.header}>
