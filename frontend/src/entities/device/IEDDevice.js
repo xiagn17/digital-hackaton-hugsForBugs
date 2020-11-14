@@ -1,5 +1,6 @@
 import AbstractDevice from './AbstractDevice';
 import Rza220 from '../../components/Rza220';
+import { INITIAL, CONNECTED } from '../../const/PORT_STATUS';
 
 export const IED = 'ied';
 
@@ -13,24 +14,12 @@ class IEDDevice extends AbstractDevice {
         this.vlanId = '';
         this.minTime = null;
         this.maxTime = null;
-        this.ports = [1, 2, 3];
-        this.subscriptions = [];
+        this.ports = Array(3)
+            .fill(null)
+            .map((_, i) => ({ id: `${this.id}-${i}`, status: INITIAL }));
 
         this.subscribeTo = this.subscribeTo.bind(this);
         this.unsubscribeFrom = this.unsubscribeFrom.bind(this);
-    }
-
-    subscribeTo(deviceId, port) {
-        this.subscriptions.push({
-            id: deviceId,
-            port,
-        });
-    }
-
-    unsubscribeFrom(deviceId, port) {
-        this.subscriptions = this.subscriptions.filter((s) => (
-            s.id !== deviceId && s.port !== port
-        ));
     }
 }
 

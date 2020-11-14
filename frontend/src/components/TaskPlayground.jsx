@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Device from './Device';
-import Draggable from 'react-draggable';
 import Xarrow from 'react-xarrows';
+import { IED } from '../entities/device/IEDDevice';
+
 import GooseSettings from "./GooseSettings";
 
 import styled from 'styled-components';
@@ -13,7 +14,6 @@ const boxStyle = {
     borderRadius: '10px',
     padding: '5px',
 };
-
 const Container = styled.div`
 padding: 10px;
 left: 320px;
@@ -27,15 +27,20 @@ z-index: 100;
 `;
 
 export default function TaskPlayground({ devices }) {
-    const box1Ref = useRef(null);
-    const box2Ref = useRef(null);
-    const [connectionRerenderTrigger, triggerConnectionRerender] = useState(
-        null,
+    const [coordinates, setCoordinates] = useState({});
+    const connections = useMemo(
+        () =>
+            devices
+                .filter(({ type }) => type === IED)
+                .reduce(
+                    (accum, elem) =>
+                        elem.subscriptions?.length
+                            ? accum.concat(elem.subscriptions)
+                            : accum,
+                    [],
+                ),
+        [devices],
     );
-
-    const onDrag = (e, position) => {
-        // triggerConnectionRerender(position);
-    };
 
     return (
         <Container
@@ -43,11 +48,25 @@ export default function TaskPlayground({ devices }) {
             {devices.map(
                 (device, i) =>
                     device?.model?.component && (
-                        <Device key={device.id} device={device} onDrag={onDrag} deviceIndex={i + 1} />
+                        <Device
+                            setCoordinates={setCoordinates}
+                            key={device.id}
+                            device={device}
+                            deviceIndex={i + 1}
+                        />
                     ),
             )}
+            {connections.map((c) => {
+                return (
+                    <Xarrow
+                        key={coordinates}
+                        start={c.localPortId}
+                        end={c.remotePortId}
+                    />
+                );
+            })}
             <GooseSettings devices={devices}/>
-        </Container>
+        </div>
     );
 }
 

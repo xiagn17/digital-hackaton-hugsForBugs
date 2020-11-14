@@ -1,16 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
+import { debounce } from 'lodash';
 
 const boxStyle = {
     width: 100,
     height: 100,
-    // border: 'grey solid 2px',
-    // borderRadius: '10px',
-    // padding: '5px',
 };
 
-const Device = ({ onDrag, device, deviceIndex }) => {
+const Device = ({ setCoordinates, device, deviceIndex }) => {
+    const onDrag = debounce((e, coordinates) => {
+        if (device.subscriptions.length) {
+            setCoordinates(coordinates);
+            setCoordinates((prevState) => {
+                const coordinatesCopy = { ...prevState };
+                const updatedCoordinates = device.subscriptions.reduce(
+                    (accum, s) => {
+                        accum[s.localPortId] = coordinates;
+                        accum[s.removePortId] = coordinates;
+
+                        return accum;
+                    },
+                    coordinatesCopy,
+                );
+
+                return updatedCoordinates;
+            });
+        }
+    }, 0);
+
     const deviceName = deviceIndex > 0 && device.type === 'ied' ? device.type.toUpperCase() + deviceIndex : null;
     return (
         <Draggable

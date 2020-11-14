@@ -7,12 +7,15 @@ import { useDialog } from '../hooks/useDialog';
 import { ReactComponent as PlusIcon } from '../assets/imgs/icons/Rza220.svg';
 import { ReactComponent as DeleteIcon } from '../assets/imgs/icons/delete.svg';
 import { ReactComponent as SettingsIcon } from '../assets/imgs/icons/settings.svg';
+import { cnb } from 'cnbuilder';
+import { PENDING, CONNECTED } from '../const/PORT_STATUS';
 import styled from 'styled-components';
 
 
 const useStyles = makeStyles(() => ({
     item: {
         position: 'relative',
+        width: 171,
     },
     icon: {
         position: 'relative',
@@ -22,6 +25,29 @@ const useStyles = makeStyles(() => ({
         bottom: 10,
         left: 10,
     },
+    portsWrapper: {
+        display: 'flex',
+        position: 'absolute',
+        bottom: 15,
+        right: 8.5,
+        margin: 0,
+    },
+    port: {
+        display: 'block',
+        backgroundColor: 'white',
+        width: 16,
+        height: 16,
+        borderRadius: '50%',
+        margin: 3,
+        border: '1px solid #2A5EA1',
+        cursor: 'pointer',
+    },
+    portPending: {
+        backgroundColor: 'green',
+    },
+    portConnected: {
+        backgroundColor: '#2A5EA1',
+    }
 }));
 
 const DeviceName = styled.div`
@@ -38,7 +64,7 @@ color: #000000;
 
 const Rza220 = ({ device, deviceName }) => {
     const {
-        actions: { removeDevice },
+        actions: { removeDevice, resolveConnection },
     } = useContext(TaskContext);
     const { open, onOpen, onClose } = useDialog();
     const classes = useStyles();
@@ -72,6 +98,30 @@ const Rza220 = ({ device, deviceName }) => {
                     device={device}
                 />
             </div>
+            <ul className={classes.portsWrapper}>
+                {device.ports.map(({ id, status }) => {
+                    const portClassName = cnb(classes.port, {
+                        [classes.portPending]: status === PENDING,
+                        [classes.portConnected]: status === CONNECTED,
+                    });
+
+                    const handleResolveConnection = () => {
+                        if (status === CONNECTED) {
+                            return;
+                        }
+                        resolveConnection(device.id, id);
+                    };
+
+                    return (
+                        <span
+                            key={id}
+                            id={id}
+                            className={portClassName}
+                            onClick={handleResolveConnection}
+                        />
+                    );
+                })}
+            </ul>
         </div>
     );
 };
