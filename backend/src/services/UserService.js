@@ -22,6 +22,10 @@ class UserService {
         return this.userModel.create(userDTO);
     }
 
+    async getAll() {
+        return this.userModel.find({role: 'USER'});
+    }
+
     async findUser(id) {
         return this.userModel.findById(id);
     }

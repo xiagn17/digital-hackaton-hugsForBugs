@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import {sendHttpRequest} from "../utils/sendHttpRequest";
-import {API_TEST_GETALL} from "../const/API_URL";
+import {API_TEST_GETALL, API_ALL} from "../const/API_URL";
 import Page from "../components/Page";
 import Table from "../components/common/Table";
 import TableButton from "../components/common/TableButton";
+
+
+import StatsAdmin1 from '../assets/imgs/admin_stats.png';
+import StatsAdmin2 from '../assets/imgs/admin_round.png';
+import TestQuestions from "../TestQuestions";
 
 const profileIcon = <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M16 6C16 9.31371 13.7614 12 11 12C8.23858 12 6 9.31371 6 6C6 2.68629 8.23858 0 11 0C13.7614 0 16 2.68629 16 6Z" fill="white"/>
@@ -14,6 +19,11 @@ const statIcon = <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xml
     <path d="M10.9091 0H9.09091C8.09091 0 7.27273 0.818182 7.27273 1.81818V16.3636C7.27273 17.3636 8.09091 18.1818 9.09091 18.1818H10.9091C11.9091 18.1818 12.7273 17.3636 12.7273 16.3636V1.81818C12.7273 0.818182 11.9091 0 10.9091 0Z" fill="white"/>
     <path d="M3.63636 9.09091H1.81818C0.818182 9.09091 0 9.90909 0 10.9091V16.3636C0 17.3636 0.818182 18.1818 1.81818 18.1818H3.63636C4.63636 18.1818 5.45455 17.3636 5.45455 16.3636V10.9091C5.45455 9.90909 4.63636 9.09091 3.63636 9.09091Z" fill="white"/>
     <path d="M16.3636 5.45455H18.1818C19.1818 5.45455 20 6.27273 20 7.27273V16.3636C20 17.3636 19.1818 18.1818 18.1818 18.1818H16.3636C15.3636 18.1818 14.5455 17.3636 14.5455 16.3636V7.27273C14.5455 6.27273 15.3636 5.45455 16.3636 5.45455Z" fill="white"/>
+</svg>;
+const userIcon = () => <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10.9091 0H9.09091C8.09091 0 7.27273 0.818182 7.27273 1.81818V16.3636C7.27273 17.3636 8.09091 18.1818 9.09091 18.1818H10.9091C11.9091 18.1818 12.7273 17.3636 12.7273 16.3636V1.81818C12.7273 0.818182 11.9091 0 10.9091 0Z" fill="#2A5EA1"/>
+    <path d="M3.63636 9.09091H1.81818C0.818182 9.09091 0 9.90909 0 10.9091V16.3636C0 17.3636 0.818182 18.1818 1.81818 18.1818H3.63636C4.63636 18.1818 5.45455 17.3636 5.45455 16.3636V10.9091C5.45455 9.90909 4.63636 9.09091 3.63636 9.09091Z" fill="#2A5EA1"/>
+    <path d="M16.3636 5.45455H18.1818C19.1818 5.45455 20 6.27273 20 7.27273V16.3636C20 17.3636 19.1818 18.1818 18.1818 18.1818H16.3636C15.3636 18.1818 14.5455 17.3636 14.5455 16.3636V7.27273C14.5455 6.27273 15.3636 5.45455 16.3636 5.45455Z" fill="#2A5EA1"/>
 </svg>;
 
 
@@ -30,6 +40,8 @@ const FlexContainerRow = styled.div`
 display: flex;
 flex-direction: row;
 width: 100%;
+`;
+const FirstContainer = styled(FlexContainerRow)`
 justify-content: space-between;
 margin-bottom: 47px;
 `;
@@ -38,38 +50,137 @@ const MiddleTable = styled(Table)`
 width: calc(50% - 12px);
 `;
 const BigTable = styled(Table)`
-width: calc(50% - 12px);
+width: 100%;
 `;
+
+const Stats = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`;
+
+const List = styled.div`
+
+`;
+const Line = styled.div`
+:not(:first-child){
+margin-top: 24px;
+}
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+
+`;
+
+const ImgButton = styled(userIcon)``;
+const UserList = ({users, onShowUser}) => {
+    return (
+        <List>
+            {users.map((user, index) => {
+                const {fullName, groupId} = user;
+                return (
+                    <Line key={`${fullName}_${groupId}`}>
+                        <div>
+                            {index + 1} {fullName}
+                        </div>
+                        <div onClick={() => onShowUser(user)}><ImgButton/></div>
+                    </Line>
+                );
+            })}
+        </List>
+    )
+}
+
+const Separated = styled.div`
+display:flex;
+flex-direction: column;
+width: 50%;
+`;
+const UserName = styled.div`
+font-weight: bold;
+font-size: 24px;
+line-height: 28px;
+color: #000000;
+margin-bottom: 28px;
+`;
+
+const ClosedTasks = styled.div`
+display: flex;
+flex-direction: column;
+`;
+const ClosedTasksTitle = styled.div`
+font-weight: bold;
+font-size: 17px;
+line-height: 28px;
+color: #000000;
+margin-bottom: 16px;
+`;
+
 
 const Admin = () => {
     const [statistics, setStatistics] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [userToShow, setUserToShow] = useState({});
+
     useEffect(async () => {
         const allTests = await sendHttpRequest({
             url: API_TEST_GETALL,
             method: 'GET',
         });
+        const allUsers = await sendHttpRequest({
+            url: API_ALL,
+            method: 'GET',
+        });
+        setUsers(allUsers);
         setStatistics(allTests);
     }, []);
 
+    const onShowUser = (user) => {
+        console.log(user);
+        setUserToShow(user);
+    };
+
+    const userStatistics = statistics.filter(s => s.user?.groupId === userToShow?.groupId && s.user?.fullName === userToShow?.fullName)[0] || {};
     return (
         <Page>
             <Container>
-                <FlexContainerRow>
-                    <MiddleTable headerIcon={profileIcon} headerText="Список обучающихся" backgroundColor="#2A5EA1">
-                        {statistics.map(({results, user}, index) => {
-                            return (
-                                <div>{index + 1} {user.fullName}</div>
-                            );
-                        })}
-                        <TableButton>Подробнее</TableButton>
-
-                    </MiddleTable>
-                    <MiddleTable headerText="Добавление заданий">
-                        heh
-                    </MiddleTable>
-                </FlexContainerRow>
-                <BigTable headerText="Аналитика по заданиям" headerIcon={statIcon}>
-                </BigTable>
+                {userToShow.groupId ? (
+                    <FlexContainerRow>
+                        <Separated>
+                            <div onClick={() => setUserToShow({})}>Back</div>
+                            <UserName>{userToShow.fullName}, группа {userToShow.groupId}</UserName>
+                            <ClosedTasks>
+                                <ClosedTasksTitle>Завершенные задания</ClosedTasksTitle>
+                                <div>Тестовая часть: {userStatistics.results?.rightAnswersCount} правильных ответов из {TestQuestions.length}</div>
+                            </ClosedTasks>
+                        </Separated>
+                        <Separated>Statistics</Separated>
+                    </FlexContainerRow>
+                ) : (
+                <>
+                    <FirstContainer>
+                        <MiddleTable headerIcon={profileIcon} headerText="Список обучающихся" backgroundColor="#2A5EA1">
+                            <UserList users={users} onShowUser={onShowUser}/>
+                        </MiddleTable>
+                        <MiddleTable headerText="Добавление заданий">
+                            heh
+                        </MiddleTable>
+                    </FirstContainer>
+                    <BigTable headerText="Аналитика по заданиям" headerIcon={statIcon}>
+                        <FlexContainerRow>
+                            <Stats>
+                                <img src={StatsAdmin1} alt="Stats1" />
+                                Средний балл за октябрь 2020
+                                <TableButton>Подробнее</TableButton>
+                            </Stats>
+                            <Stats>
+                                <img src={StatsAdmin2} alt="Stats2" />
+                                Средний прогресс по курсу группы 1234
+                            </Stats>
+                        </FlexContainerRow>
+                    </BigTable>
+                </>
+                )}
             </Container>
         </Page>
     );
