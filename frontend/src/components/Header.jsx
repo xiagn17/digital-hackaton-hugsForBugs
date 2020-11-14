@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LogoImg from '../assets/imgs/logo.png';
+import { UserContext } from '../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -19,15 +20,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 const Header = (props) => {
     const { children } = props;
     const classes = useStyles();
 
+    const { state: { user } } = useContext(UserContext);
+    console.log(user)
+
     return (
         <header className={classes.header}>
             {children || (
-                <img className={classes.logo} src={LogoImg} alt="Россети" />
+                <>
+                    <img className={classes.logo} src={LogoImg} alt="Россети" />
+                    {/* {user && (
+
+                    )} */}
+                </>
             )}
         </header>
     );

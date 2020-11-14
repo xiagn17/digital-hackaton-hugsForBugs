@@ -6,6 +6,7 @@ import CheckAuth from './CheckAuth';
 
 import LoginPage from '../pages/Login';
 import TaskPage from '../pages/Task';
+import HomePage from '../pages/Home';
 import TestPage from '../pages/Test';
 import AdminPage from '../pages/Admin';
 
@@ -26,7 +27,8 @@ export default function Router() {
         <BrowserRouter>
             <Switch>
                 {makeRoute(Routes.login, LoginPage)}
-                {makeRoute(Routes.home, TaskPage)}
+                {makeRoute(Routes.home, HomePage)}
+                {makeRoute(Routes.task, TaskPage)}
                 {makeRoute(Routes.test, TestPage)}
                 {makeRoute(Routes.admin, AdminPage)}
                 <Redirect exact to={Routes.login.path} />
