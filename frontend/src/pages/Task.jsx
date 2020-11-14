@@ -118,7 +118,10 @@ const Task = () => {
     const step = 1;
     const totalSteps = 2;
 
-    const taskType = useMemo(() => step === 1 ? 'Практическое' : 'Теоретическое', [step]);
+    const taskType = useMemo(
+        () => (step === 1 ? 'Практическое' : 'Теоретическое'),
+        [step],
+    );
 
     const {
         state: { devices },
@@ -173,7 +176,7 @@ const Task = () => {
         setDetailedDevice(value);
         setDetailedDeviceChosen(true);
     }, []);
-    console.log({devices})
+    console.log({ devices });
 
     return (
         <>
@@ -199,6 +202,7 @@ const Task = () => {
                     unmountOnExit
                 >
                     <SelectDeviceModel
+                        detailedDevice={detailedDevice}
                         category={category}
                         onChangeDevice={onChangeDetailedDevice}
                         onClearCategory={onClearCategory}
@@ -214,6 +218,7 @@ const Task = () => {
                     <DeviceInfo
                         detailedDevice={detailedDevice}
                         onClearDetailedDevice={onClearDetailedDevice}
+                        onAddDevice={onAddDevice}
                         classes={classes}
                     />
                 </Slide>
