@@ -4,6 +4,8 @@ services:
   backend:
     build: .
     restart: always
+    depends_on:
+      - mongo
     environment:
       - MONGO_URL=mongo:27017
     ports:
