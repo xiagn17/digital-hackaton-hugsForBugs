@@ -12,7 +12,7 @@ class TaskStore {
         this._devices = [];
         this._step = 1;
         this._gooseSettings = [];
-        this.errors = [];
+        this._errors = [];
         
         makeObservable(this, {
             _devices: observable,
@@ -21,7 +21,7 @@ class TaskStore {
 
             devices: computed,
             step: computed,
-            _gooseSettings: computed,
+            gooseSettings: computed,
 
             createDevice: action,
             updateDevice: action,
