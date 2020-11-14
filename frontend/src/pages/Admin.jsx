@@ -12,6 +12,16 @@ import StatsAdmin2 from '../assets/imgs/admin_round.png';
 import TestQuestions from "../TestQuestions";
 import { TaskInfo } from "./Home";
 
+const tasksToAdd = [
+    'Настройка IED на прием-передачу GOOSE-сообщений',
+    'Соединение присоединений Bay',
+    'Атрибут данных DataAtribute',
+    'Протокол МЭК 61850-8-1 GOOSE',
+    'Протокол передачи данных Sampled Values',
+    'Режим работы (Mod) и поведение (Beh) функций',
+    'Сценарии использования режимов испытаний для SV-потоков'
+];
+
 const profileIcon = <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M16 6C16 9.31371 13.7614 12 11 12C8.23858 12 6 9.31371 6 6C6 2.68629 8.23858 0 11 0C13.7614 0 16 2.68629 16 6Z" fill="white"/>
     <path d="M16 12.9C18.2 13.8 19.9 15.3 20.8 17.1C21.5 18.5 20.4 20 18.9 20H3.09997C1.59997 20 0.499973 18.5 1.19997 17.2C2.09997 15.4 3.79997 13.9 5.99997 13C6.59997 12.7 7.29997 12.8 7.79997 13C8.79997 13.6 9.79997 13.9 11 13.9C12.2 13.9 13.2 13.6 14.2 13C14.7 12.7 15.4 12.7 16 12.9Z" fill="white"/>
@@ -58,6 +68,17 @@ const Stats = styled.div`
 display: flex;
 flex-direction: column;
 align-items: center;
+& > img {
+width: 160px;
+height: 160px;
+margin-bottom: 24px;
+}
+& > button {
+margin-top: 24px;
+}
+:first-child {
+margin-right: 70px;
+}
 `;
 
 const List = styled.div`
@@ -71,6 +92,10 @@ display: flex;
 flex-direction: row;
 justify-content: space-between;
 
+:hover {
+cursor: pointer;
+background: #fafafa;
+}
 `;
 
 const ImgButton = styled(userIcon)``;
@@ -80,11 +105,11 @@ const UserList = ({users, onShowUser}) => {
             {users.map((user, index) => {
                 const {fullName, groupId} = user;
                 return (
-                    <Line key={`${fullName}_${groupId}`}>
+                    <Line key={`${fullName}_${groupId}`} onClick={() => onShowUser(user)}>
                         <div>
                             {index + 1} {fullName}
                         </div>
-                        <div onClick={() => onShowUser(user)}><ImgButton/></div>
+                        <div><ImgButton/></div>
                     </Line>
                 );
             })}
@@ -118,9 +143,22 @@ margin-bottom: 16px;
 `;
 
 
-const UserInfo = styled.div`
+const AddTasksAligner = styled.div`
 display: flex;
 flex-direction: column;
+align-items: center;
+margin-top: 40px;
+`;
+
+const CustomTableButton = styled(TableButton)`
+width: 150px;
+margin-bottom: 40px;
+`;
+
+const Li = styled.li`
+:not(:first-child){
+margin-top: 24px;
+}
 `;
 const Admin = () => {
     const [statistics, setStatistics] = useState([]);
@@ -152,7 +190,7 @@ const Admin = () => {
                 {userToShow.groupId ? (
                     <FlexContainerRow>
                         <Separated>
-                            <div onClick={() => setUserToShow({})}>Back</div>
+                            <CustomTableButton onClick={() => setUserToShow({})}>Назад</CustomTableButton>
                             <UserName>{userToShow.fullName}, группа {userToShow.groupId}</UserName>
                             <ClosedTasks>
                                 <ClosedTasksTitle>Завершенные задания</ClosedTasksTitle>
@@ -172,7 +210,14 @@ const Admin = () => {
                             <UserList users={users} onShowUser={onShowUser}/>
                         </MiddleTable>
                         <MiddleTable headerText="Добавление заданий">
-                            heh
+                            <ul>
+                                {tasksToAdd.map(text => (
+                                    <Li>{text}</Li>
+                                ))}
+                            </ul>
+                            <AddTasksAligner>
+                                <TableButton>Добавить задание</TableButton>
+                            </AddTasksAligner>
                         </MiddleTable>
                     </FirstContainer>
                     <BigTable headerText="Аналитика по заданиям" headerIcon={statIcon}>
@@ -185,6 +230,7 @@ const Admin = () => {
                             <Stats>
                                 <img src={StatsAdmin2} alt="Stats2" />
                                 Средний прогресс по курсу группы 1234
+                                <TableButton>Подробнее</TableButton>
                             </Stats>
                         </FlexContainerRow>
                     </BigTable>
