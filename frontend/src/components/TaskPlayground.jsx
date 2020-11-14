@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Device from './Device';
 import Draggable from 'react-draggable';
 import Xarrow from 'react-xarrows';
+import { IED } from '../entities/device/IEDDevice';
 
 const boxStyle = {
     width: 100,
@@ -12,15 +13,20 @@ const boxStyle = {
 };
 
 export default function TaskPlayground({ devices }) {
-    const box1Ref = useRef(null);
-    const box2Ref = useRef(null);
-    const [connectionRerenderTrigger, triggerConnectionRerender] = useState(
-        null,
+    const [coordinates, setCoordinates] = useState({});
+    const connections = useMemo(
+        () =>
+            devices
+                .filter(({ type }) => type === IED)
+                .reduce(
+                    (accum, elem) =>
+                        elem.subscriptions?.length
+                            ? accum.concat(elem.subscriptions)
+                            : accum,
+                    [],
+                ),
+        [devices],
     );
-
-    const onDrag = (e, position) => {
-        // triggerConnectionRerender(position);
-    };
 
     return (
         <div
@@ -35,9 +41,22 @@ export default function TaskPlayground({ devices }) {
             {devices.map(
                 (device) =>
                     device?.model?.component && (
-                        <Device key={device.id} device={device} onDrag={onDrag} />
+                        <Device
+                            setCoordinates={setCoordinates}
+                            key={device.id}
+                            device={device}
+                        />
                     ),
             )}
+            {connections.map((c) => {
+                return (
+                    <Xarrow
+                        key={coordinates}
+                        start={c.localPortId}
+                        end={c.remotePortId}
+                    />
+                );
+            })}
         </div>
     );
 }

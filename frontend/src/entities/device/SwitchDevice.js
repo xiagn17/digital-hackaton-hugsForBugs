@@ -1,5 +1,6 @@
 import AbstractDevice from './AbstractDevice';
 import Ciso7000 from '../../components/Ciso7000';
+import { INITIAL } from '../../const/PORT_STATUS';
 
 const TYPE = 'switch';
 
@@ -7,6 +8,9 @@ class SwitchDevice extends AbstractDevice {
     constructor(name, model) {
         super(name, model, TYPE);
         this.networkSettings = {};
+        this.ports = Array(8)
+            .fill(null)
+            .map((_, i) => ({ id: `${this.id}-${i}`, status: INITIAL }));
     }
 
     getNetworkSettings() {

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { PENDING, INITIAL } from '../const/PORT_STATUS';
 
 const TaskContext = React.createContext();
 
@@ -10,6 +11,20 @@ const TaskContextProvider = (props) => {
         devices: [],
         step: 1,
     });
+
+    const { pendingPort, deviceWithPendingPort } = useMemo(() => {
+        for (const device of state.devices) {
+            const pendingPort = device.ports.find(
+                ({ status }) => status === PENDING,
+            );
+
+            if (pendingPort) {
+                return { pendingPort, deviceWithPendingPort: device };
+            }
+        }
+
+        return {};
+    }, [state.devices]);
 
     const addDevice = (device) => {
         setState((prevState) => {
@@ -83,11 +98,78 @@ const TaskContextProvider = (props) => {
         });
     };
 
+    const connectDevices = (
+        deviceAId,
+        deviceAPortId,
+        deviceBId,
+        deviceBPortId,
+    ) => {
+        setState((prevState) => {
+            const devicesCopy = prevState.devices.concat();
+
+            const deviceA = devicesCopy.find(({ id }) => deviceAId === id);
+            const deviceB = devicesCopy.find(({ id }) => deviceBId === id);
+
+            if (deviceAId === deviceBId || deviceA.type === deviceB.type) {
+                return prevState;
+            }
+
+            deviceA.subscribeTo(deviceBId, deviceBPortId, deviceAPortId);
+            deviceB.subscribeTo(deviceAId, deviceAPortId, deviceBPortId);
+
+            return {
+                ...prevState,
+                devices: devicesCopy,
+            };
+        });
+    };
+
+    const updatePortStatusOfDevice = (
+        deviceId,
+        devicePortId,
+        status = PENDING,
+    ) => {
+        setState((prevState) => {
+            const devicesCopy = prevState.devices.concat();
+
+            const deviceToUpdate = devicesCopy.find(
+                ({ id }) => deviceId === id,
+            );
+
+            deviceToUpdate.updatePortStatus(devicePortId, status);
+
+            return {
+                ...prevState,
+                devices: devicesCopy,
+            };
+        });
+    };
+
+    const resolveConnection = useCallback((deviceId, portId) => {
+        if (pendingPort && deviceWithPendingPort) {
+            if (deviceWithPendingPort.id === portId) {
+                updatePortStatusOfDevice(deviceId, portId, INITIAL);
+            } else if (deviceId === deviceWithPendingPort.id) {
+                updatePortStatusOfDevice(deviceId, pendingPort.id, INITIAL);
+            } else {
+                connectDevices(
+                    deviceId,
+                    portId,
+                    deviceWithPendingPort.id,
+                    pendingPort.id,
+                );
+            }
+        } else {
+            updatePortStatusOfDevice(deviceId, portId);
+        }
+    }, [state.devices]);
+
     const actions = {
         addDevice,
         removeDevice,
         updateDevice,
         updateDevicesNetworkSettings,
+        resolveConnection,
     };
 
     return (
