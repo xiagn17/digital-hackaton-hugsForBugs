@@ -3,8 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
 
-const indexRouter = require('../api');
-const authRouter = require('../api/auth/auth');
+const apiRouter = require('../api');
 
 module.exports = function ({ expressApp: app }) {
     app.use(express.json());
@@ -22,6 +21,5 @@ module.exports = function ({ expressApp: app }) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    app.use('/', indexRouter);
-    app.use('/auth', authRouter);
+    app.use('/api', apiRouter);
 };
