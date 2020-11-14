@@ -1,16 +1,19 @@
 import React from 'react';
 import { cnb } from 'cnbuilder';
-import { Dialog, DialogTitle, DialogContent, Typography, Grid } from '@material-ui/core';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Typography,
+    Grid,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
 import { Close } from '@material-ui/icons';
 
 import IEDSettingsForm from '../forms/IEDSettingsForm';
 
-const Transition = React.forwardRef(function Transition(
-    props,
-    ref,
-) {
+const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -77,10 +80,10 @@ const IEDSettingsDialog = (props) => {
                 </Grid>
             </DialogTitle>
             <DialogContent>
-                <IEDSettingsForm device={device} />
+                <IEDSettingsForm device={device} onClose={onClose} />
             </DialogContent>
         </Dialog>
-    )
+    );
 };
 
 export default IEDSettingsDialog;

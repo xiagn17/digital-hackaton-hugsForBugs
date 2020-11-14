@@ -1,15 +1,18 @@
 import React from 'react';
 import { cnb } from 'cnbuilder';
-import { Dialog, DialogTitle, DialogContent, Typography, Grid } from '@material-ui/core';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Typography,
+    Grid,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
 import { Close } from '@material-ui/icons';
 import NetworkSettingsForm from '../forms/NetworkSettingsForm';
 
-const Transition = React.forwardRef(function Transition(
-    props,
-    ref,
-) {
+const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -44,7 +47,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NetworkSettingsDialog = (props) => {
-    const { open, onClose, devices } = props;
+    const { open, onClose, devices, updateDevicesNetworkSettings } = props;
 
     const classes = useStyles();
 
@@ -76,10 +79,14 @@ const NetworkSettingsDialog = (props) => {
                 </Grid>
             </DialogTitle>
             <DialogContent>
-                <NetworkSettingsForm devices={devices} />
+                <NetworkSettingsForm
+                    devices={devices}
+                    onClose={onClose}
+                    updateDevicesNetworkSettings={updateDevicesNetworkSettings}
+                />
             </DialogContent>
         </Dialog>
-    )
+    );
 };
 
 export default NetworkSettingsDialog;

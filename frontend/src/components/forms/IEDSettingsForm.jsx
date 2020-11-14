@@ -23,10 +23,6 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const logData = (data) => {
-    console.log(data);
-};
-
 const IEDSettingsForm = (props) => {
     const { device, onClose } = props;
     const {
@@ -41,6 +37,7 @@ const IEDSettingsForm = (props) => {
 
     const updateDeviceInfo = (IEDData) => {
         updateDevice(device.id, IEDData);
+        onClose();
     };
 
     return (

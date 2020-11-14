@@ -5,8 +5,7 @@ export const IED = 'ied';
 
 class IEDDevice extends AbstractDevice {
     constructor(name, model) {
-        super(name, IED);
-        this.model = model;
+        super(name, model, IED);
         this.gcb = '';
         this.gooseId = '';
         this.macAddress = '';

@@ -5,6 +5,7 @@ import { Typography, TextField, Button } from '@material-ui/core';
 
 import Form from '../../components/common/Form';
 import IpMaskInput from '../common/IpMaskInput';
+import { IED } from '../../entities/device/IEDDevice';
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -26,7 +27,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Device = (props) => {
-    const { device: { label, id }, control, classes } = props;
+    const {
+        device: { label, id },
+        control,
+        classes,
+    } = props;
 
     return (
         <div>
@@ -39,7 +44,7 @@ const Device = (props) => {
                 margin="normal"
                 fullWidth
                 placeholder="IP адрес"
-                name={`${id}-ipAddress`}
+                name={`${id}.ipAddress`}
                 autoFocus
                 control={control}
                 required
@@ -55,7 +60,7 @@ const Device = (props) => {
                 margin="normal"
                 fullWidth
                 placeholder="Маска подсети"
-                name={`${id}-mask`}
+                name={`${id}.mask`}
                 autoFocus
                 control={control}
                 required
@@ -70,24 +75,36 @@ const Device = (props) => {
 };
 
 const NetworkSettingsForm = (props) => {
-    const { devices, onClose } = props;
+    const { devices, onClose, updateDevicesNetworkSettings } = props;
 
     const classes = useStyles();
 
-    const {
-        handleSubmit: onSubmitForm, control,
-    } = useForm({
+    const { handleSubmit: onSubmitForm, control } = useForm({
         defaultValues: {},
     });
 
+    const iedDevices = devices.filter(({ type }) => {
+        return type === IED;
+    });
+
+    const handleSubmit = (data) => {
+        updateDevicesNetworkSettings(data);
+        onClose();
+    };
+
     return (
-        <Form onSubmit={onSubmitForm}>
-            {devices.map((device) => (
-                <Device
-                    device={device}
-                    control={control}
-                    classes={classes}
-                />
+        <Form onSubmit={onSubmitForm(handleSubmit)}>
+            {iedDevices.map((device, index) => (
+                <>
+                    <Typography className={classes.header} variant="h6">
+                        {`${device.type.toUpperCase()}${index + 1}`}
+                    </Typography>
+                    <Device
+                        device={device}
+                        control={control}
+                        classes={classes}
+                    />
+                </>
             ))}
             <Button
                 type="submit"
