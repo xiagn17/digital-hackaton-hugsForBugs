@@ -29,7 +29,7 @@ const SelectOption = (props) => {
     }, []);
 
     return (
-        <button className={cnb(classes.root, { [classes.active]: activeOption?.value === option.value })} onClick={onClick}>
+        <button className={cnb(classes.root, { [classes.active]: activeOption?.label === option.label })} onClick={onClick}>
             {option.label}
         </button>
     );

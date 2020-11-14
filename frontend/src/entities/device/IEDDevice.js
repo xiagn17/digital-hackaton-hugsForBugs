@@ -1,10 +1,11 @@
-import AbstractDevice from "./AbstractDevice";
+import AbstractDevice from './AbstractDevice';
+import Rza220 from '../../components/Rza220';
 
-const TYPE = 'ied';
+export const IED = 'ied';
 
 class IEDDevice extends AbstractDevice {
     constructor(name, model) {
-        super(name, model, TYPE);
+        super(name, IED);
         this.model = model;
         this.gcb = '';
         this.gooseId = '';
@@ -36,9 +37,14 @@ class IEDDevice extends AbstractDevice {
 
 export default IEDDevice;
 
+const BEP_1_LABEL = 'БЭМП РУ-ОЛ.5.220П.R';
+const BEP_2_LABEL = 'БМРЗ–101–2–Д–КЛ–01';
+const BEP_3_LABEL = 'БМРЗ-103-2-Д-СВ-01';
+const BEP_4_LABEL = 'БМРЗ-103-2-Д-ВВ-01';
+
 export const MODELS = [
     {
-        label: 'БЭМП РУ-ОЛ.5.220П.R',
+        label: BEP_1_LABEL,
         img: 'https://www.mtrele.ru/images/site/catalog/bmrz-150-lico.jpg',
         details: `Микропроцессорный блок серии БЭМП РУ-ОЛ  (с микропроцессорной и микроэлектронной элементной базой) предназначен для релейной защиты  и автоматики, управления и сигнализации понижающих трансформаторов и прочих электроустановок, воздушных и кабельных линий электропередачи напряжением 6 - 35 кВ.
 
@@ -48,20 +54,27 @@ export const MODELS = [
         — управление выключателем, контроль положения  и исправности цепей управления выключателя;
         — контроль и сигнализация;
         — измерение электрических параметров сети.`,
+        component: Rza220,
+        type: IED,
     },
     {
-        label: 'БМРЗ–101–2–Д–КЛ–01',
-        img: 'https://etm-volga.ru/upload/iblock/a26/a26007285960f823a5c320ab68165f5c.jpg',
+        label: BEP_2_LABEL,
+        img:
+            'https://etm-volga.ru/upload/iblock/a26/a26007285960f823a5c320ab68165f5c.jpg',
         details: 'some details',
+        type: IED,
     },
     {
-        label: 'БМРЗ-103-2-Д-СВ-01',
+        label: BEP_3_LABEL,
         img: 'https://www.mtrele.ru/images/site/catalog/bmrz-150-lico.jpg',
         details: 'some details 2',
+        type: IED,
     },
     {
-        label: 'БМРЗ-103-2-Д-ВВ-01',
-        img: 'https://etm-volga.ru/upload/iblock/a26/a26007285960f823a5c320ab68165f5c.jpg',
+        label: BEP_4_LABEL,
+        img:
+            'https://etm-volga.ru/upload/iblock/a26/a26007285960f823a5c320ab68165f5c.jpg',
         details: 'some details 3',
+        type: IED,
     },
-]
+];

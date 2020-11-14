@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import Slide from '@material-ui/core/Slide';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { TaskContext } from '../context/TaskContext';
 
 import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
 import TaskPlayground from '../components/TaskPlayground';
@@ -16,8 +17,16 @@ import SelectDeviceModel from '../components/SelectDeviceModel';
 import DeviceInfo from '../components/DeviceInfo';
 import SelectCategory from '../components/SelectCategory';
 import GooseSettingsDialog from '../components/dialogs/GooseSettingsDialog';
+import { DEVICE_TYPE_CONSTRUCTORS_MAP } from '../const/deviceTypes';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
+    dashboardWrapper: {
+        backgroundColor: '#F3F3F3',
+        height: '100%',
+        padding: 16,
+        display: 'flex',
+        alignItems: 'flex-start',
+    },
     headerText: {
         color: '#2A5EA1',
         marginBottom: 24,
@@ -25,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
     wrapper: {
         display: 'flex',
         alignItems: 'flex-start',
+    },
+    menu: {
+        position: 'relative',
+        zIndex: 401,
     },
     button: {
         paddingLeft: 0,
@@ -64,7 +77,20 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: '#2A5EA1',
             color: '#fff',
-        }
+        },
+    },
+    addBtn: {
+        display: 'block',
+        minWidth: 121,
+        margin: '0 auto',
+        textTransform: 'capitalize',
+        backgroundColor: '#2A5EA1',
+        borderRadius: 24,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#2A5EA1',
+            color: 'white',
+        },
     },
 }));
 
@@ -91,6 +117,13 @@ const Task = () => {
     const step = 1;
     const totalSteps = 2;
 
+    const taskType = useMemo(() => step === 1 ? 'Практическое' : 'Теоретическое', [step]);
+
+    const {
+        state: { devices },
+        actions: { addDevice },
+    } = useContext(TaskContext);
+
     const [isCategoryChosen, setCategoryChosen] = useState(false);
     const [category, setCategory] = useState();
     const [isDetailedDeviceChosen, setDetailedDeviceChosen] = useState(false);
@@ -99,6 +132,14 @@ const Task = () => {
     const networkSettingsDialog = useDialog();
     const iedSettingsDialog = useDialog();
     const gooseSettingsDialog = useDialog();
+
+    const onAddDevice = useCallback(() => {
+        const currentModel = detailedDevice;
+        const DeviceConstructor =
+            DEVICE_TYPE_CONSTRUCTORS_MAP[currentModel.type];
+        const device = new DeviceConstructor('bro', currentModel);
+        addDevice(device);
+    }, [detailedDevice]);
 
     const onClearDetailedDevice = useCallback(() => {
         setDetailedDeviceChosen(false);
@@ -127,21 +168,13 @@ const Task = () => {
         setDetailedDevice(value);
         setDetailedDeviceChosen(true);
     }, []);
-
-    const device1 = new IEDDevice('device-1', 0);
-    const device2 = new IEDDevice('device-2', 0);
-
-    device1.linkTo(device2);
-    console.log({
-        device1,
-        device2,
-    })
+    console.log({devices})
 
     return (
         <>
             <Header>
                 <Typography variant="h5">
-                    {`Часть ${step}/${totalSteps}. Практическое задание`}
+                    {`Часть ${step}/${totalSteps}. ${taskType} задание`}
                 </Typography>
                 <button className={classes.finishTaskButton}>
                     Завершить задание
@@ -174,10 +207,12 @@ const Task = () => {
                     unmountOnExit
                 >
                     <DeviceInfo
-                        detailedDevice={detailedDevice} onClearDetailedDevice={onClearDetailedDevice} classes={classes}
+                        detailedDevice={detailedDevice}
+                        onClearDetailedDevice={onClearDetailedDevice}
+                        classes={classes}
                     />
                 </Slide>
-                <TaskPlayground />
+                <TaskPlayground devices={devices} />
             </div>
         </>
     );
