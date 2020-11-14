@@ -5,6 +5,7 @@ import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { TaskContext } from '../context/TaskContext';
 
+import Routes from "../const/Routes";
 import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
 import { MODELS as SWITCHER_MODELS } from '../entities/device/SwitchDevice';
 import TaskPlayground from '../components/TaskPlayground';
@@ -18,6 +19,7 @@ import DeviceInfo from '../components/DeviceInfo';
 import SelectCategory from '../components/SelectCategory';
 import GooseSettingsDialog from '../components/dialogs/GooseSettingsDialog';
 import { DEVICE_TYPE_CONSTRUCTORS_MAP } from '../const/deviceTypes';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
     dashboardWrapper: {
@@ -176,13 +178,19 @@ const Task = () => {
         setDetailedDeviceChosen(true);
     }, []);
 
+    const history = useHistory()
+
+    const goHome = () => {
+        history.push(Routes.home.path)
+    };
+
     return (
         <>
             <Header>
                 <Typography variant="h5">
                     {`Часть ${step}/${totalSteps}. ${taskType} задание`}
                 </Typography>
-                <button className={classes.finishTaskButton}>
+                <button className={classes.finishTaskButton} onClick={goHome}>
                     Завершить задание
                 </button>
             </Header>

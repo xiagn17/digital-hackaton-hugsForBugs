@@ -11,6 +11,10 @@ module.exports = async () => {
             fullName: 'Алексей Алексыч',
             groupId: '87654321'
         });
+        UserService.createUser({
+            fullName: 'demo',
+            groupId: 'demo'
+        });
         UserService.createAdmin({
             fullName: 'admin',
             groupId: 'admin'
