@@ -19,13 +19,13 @@ export default function TaskPlayground() {
     };
 
     return (
-        <div>
-            <Draggable onDrag={onControlledDrag}>
+        <div style={{ padding: 10, maxWidth: '100%', maxHeight: '100%' }}>
+            <Draggable onDrag={onControlledDrag} bounds="body">
                 <div className="box" ref={box1Ref} style={boxStyle}>
                     I can be dragged anywhere
                 </div>
             </Draggable>
-            <Draggable onDrag={onControlledDrag}>
+            <Draggable onDrag={onControlledDrag} bounds="body">
                 <div className="box" ref={box2Ref} style={boxStyle}>
                     I can be dragged anywhere
                 </div>

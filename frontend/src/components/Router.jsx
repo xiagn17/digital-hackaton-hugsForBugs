@@ -2,13 +2,22 @@ import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import Routes from '../const/Routes';
+import CheckAuth from './CheckAuth';
 
 import HomePage from '../pages/Home';
 import LoginPage from '../pages/Login';
 import TaskPage from '../pages/Task';
 
 function makeRoute(route, Page = null) {
-    return <Route exact path={route.path} component={Page} />;
+    return (
+        <Route
+            exact
+            path={route.path}
+            component={(props) => (
+                <CheckAuth {...props} route={route} component={Page} />
+            )}
+        />
+    );
 }
 
 export default function Router() {
