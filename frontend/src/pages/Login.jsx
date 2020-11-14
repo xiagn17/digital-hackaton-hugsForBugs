@@ -92,7 +92,7 @@ const Login = () => {
                         margin="normal"
                         fullWidth
                         name="groupId"
-                        placeholder="В какой вы гурппе"
+                        placeholder="В какой вы группе"
                         id="groupId"
                         control={control}
                         required

@@ -10,9 +10,8 @@ const ROUTE_ROLES = {
 };
 
 const routes = {
-    home: { path: '/dashboard', routeRole: ROUTE_ROLES.authOnlyUser },
+    home: { path: '/task', routeRole: ROUTE_ROLES.authOnlyUser },
     login: { path: '/' },
-    task: { path: '/task', routeRole: ROUTE_ROLES.authOnlyUser },
     test: { path: '/test', routeRole: ROUTE_ROLES.authOnlyUser },
     admin: { path: '/admin', routeRole: ROUTE_ROLES.authOnlyAdmin },
 };
