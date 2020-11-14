@@ -176,7 +176,6 @@ const Task = () => {
         setDetailedDevice(value);
         setDetailedDeviceChosen(true);
     }, []);
-    console.log({ devices });
 
     return (
         <>
