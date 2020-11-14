@@ -9,6 +9,7 @@ import routes from '../const/Routes';
 import { UserContext } from '../context/UserContext';
 import { API_ME } from '../const/API_URL';
 import { sendHttpRequest } from '../utils/sendHttpRequest';
+import ROLES from "../const/UserRoles";
 
 const useStyles = makeStyles((theme) => ({
     formWrapper: {
@@ -60,7 +61,11 @@ const Login = () => {
     };
 
     if (user) {
-        return <Redirect to={routes.home.path} />;
+        if (user.role === ROLES.user) {
+            return <Redirect to={routes.home.path} />;
+        } else if (user.role === ROLES.admin) {
+            return <Redirect to={routes.admin.path}/>
+        }
     }
 
     return (
@@ -88,7 +93,6 @@ const Login = () => {
                         fullWidth
                         name="groupId"
                         placeholder="В какой вы гурппе"
-                        type="number"
                         id="groupId"
                         control={control}
                         required

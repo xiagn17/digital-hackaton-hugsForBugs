@@ -16,4 +16,10 @@ router.get('/', async (req, res, next) => {
     res.send(results);
 });
 
+router.get('/all', async (req, res, next) => {
+    const {user} = req;
+    const results = await TestResultsService.getAll(user);
+    res.send(results);
+});
+
 module.exports = router;

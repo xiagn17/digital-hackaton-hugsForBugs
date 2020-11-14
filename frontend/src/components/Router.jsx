@@ -8,6 +8,7 @@ import HomePage from '../pages/Home';
 import LoginPage from '../pages/Login';
 import TaskPage from '../pages/Task';
 import TestPage from '../pages/Test';
+import AdminPage from '../pages/Admin';
 
 function makeRoute(route, Page = null) {
     return (
@@ -29,6 +30,7 @@ export default function Router() {
                 {makeRoute(Routes.login, LoginPage)}
                 {makeRoute(Routes.task, TaskPage)}
                 {makeRoute(Routes.test, TestPage)}
+                {makeRoute(Routes.admin, AdminPage)}
                 <Redirect exact to={Routes.login.path} />
             </Switch>
         </BrowserRouter>

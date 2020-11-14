@@ -18,6 +18,10 @@ class TestResultsService {
         return this.testResultsModel.findOne({ user: user._id }).populate('user');
     }
 
+    async getAll() {
+        return this.testResultsModel.find().populate('user');
+    }
+
 }
 
 module.exports = TestResultsService;
