@@ -13,23 +13,29 @@ class IEDDevice extends AbstractDevice {
         this.vlanId = '';
         this.minTime = null;
         this.maxTime = null;
-        this.ports = [1, 2, 3];
+        this.ports = [0, 1, 2];
         this.subscriptions = [];
 
         this.subscribeTo = this.subscribeTo.bind(this);
         this.unsubscribeFrom = this.unsubscribeFrom.bind(this);
     }
 
-    subscribeTo(deviceId, port) {
-        this.subscriptions.push({
-            id: deviceId,
-            port,
-        });
+    subscribeTo(deviceId, ports) {
+        const existing = this.subscriptions.find((s) => s.id === deviceId);
+
+        if (existing) {
+            existing.ports = ports;
+        } else {
+            this.subscriptions.push({
+                id: deviceId,
+                ports,
+            });
+        }
     }
 
-    unsubscribeFrom(deviceId, port) {
+    unsubscribeFrom(deviceId) {
         this.subscriptions = this.subscriptions.filter((s) => (
-            s.id !== deviceId && s.port !== port
+            s.id !== deviceId
         ));
     }
 }

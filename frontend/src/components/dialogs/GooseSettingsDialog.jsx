@@ -42,7 +42,8 @@ const useStyles = makeStyles(() => ({
     closeButtonIcon: {
         width: '1.2em',
         height: '1.2em',
-        transform: 'translateY(3px)',
+        marginLeft: 24,
+        transform: 'translateY(5px)',
     },
 }));
 
@@ -80,7 +81,7 @@ const GooseSettingsDialog = (props) => {
                 </Grid>
             </DialogTitle>
             <DialogContent>
-                <GooseSettingsForm devices={devices} />
+                <GooseSettingsForm devices={devices} onClose={onClose} />
             </DialogContent>
         </Dialog>
     );

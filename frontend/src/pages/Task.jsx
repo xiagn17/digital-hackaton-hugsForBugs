@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useContext, useMemo } from 'react';
+import React, { useState, useCallback, useContext, useMemo, useEffect } from 'react';
 import Slide from '@material-ui/core/Slide';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { TaskContext } from '../context/TaskContext';
 
 import Routes from "../const/Routes";
-import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
+import { MODELS as EID_MODELS, IED } from '../entities/device/IEDDevice';
 import { MODELS as SWITCHER_MODELS } from '../entities/device/SwitchDevice';
 import TaskPlayground from '../components/TaskPlayground';
 import Header from '../components/Header';
@@ -16,6 +16,8 @@ import { DEVICE_TYPE_CONSTRUCTORS_MAP } from '../const/deviceTypes';
 import { useHistory } from 'react-router-dom';
 import Hint from '../components/common/Hint';
 import TaskDetails from './TaskDetails';
+import GooseSettingsDialog from '../components/dialogs/GooseSettingsDialog';
+import { useDialog } from '../hooks/useDialog';
 
 const useStyles = makeStyles(() => ({
     dashboardWrapper: {
@@ -126,6 +128,8 @@ const Task = () => {
         actions: { addDevice },
     } = useContext(TaskContext);
 
+    const ieds = useMemo(() => devices.filter((d) => d.type === IED), [devices.length]);
+
     const [isCategoryChosen, setCategoryChosen] = useState(false);
     const [category, setCategory] = useState();
     const [isDetailedDeviceChosen, setDetailedDeviceChosen] = useState(false);
@@ -177,6 +181,17 @@ const Task = () => {
         history.push(Routes.home.path)
     };
 
+    const dialog = useDialog();
+
+    useEffect(() => {
+        if (ieds.length >= 2) {
+            ieds[0].linkTo(ieds[1]);
+            console.log({
+                ieds
+            })
+        }
+    }, [ieds]);
+
     return (
         <>
             <Header>
@@ -224,6 +239,10 @@ const Task = () => {
                 <TaskPlayground devices={devices} />
                 <Hint />
             </div>
+            <button onClick={dialog.onOpen}>
+                goose
+            </button>
+            <GooseSettingsDialog open={dialog.open} onClose={dialog.onClose} devices={ieds} />
             <TaskDetails
                 title="Настройка IED на прием-передачу GOOSE-сообщений"
                 content={(
