@@ -11,9 +11,10 @@ import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
 import List from '../components/List';
 import Card from '../components/Card';
 import TaskPlayground from '../components/TaskPlayground';
+import Header from '../components/Header';
 
 const useStyles = makeStyles((theme) => ({
-    header: {
+    headerText: {
         color: '#2A5EA1',
         marginBottom: 24,
     },
@@ -47,6 +48,20 @@ const useStyles = makeStyles((theme) => ({
     deviceDetails: {
         maxWidth: 400,
     },
+    finishTaskButton: {
+        backgroundColor: 'transparent',
+        border: '1px solid #2A5EA1',
+        boxSizing: 'border-box',
+        borderRadius: 24,
+        padding: '8px 24px',
+        fontSize: 16,
+        cursor: 'pointer',
+        transition: '150ms all ease-in-out',
+        '&:hover': {
+            backgroundColor: '#2A5EA1',
+            color: '#fff',
+        }
+    },
 }));
 
 const categoryOptions = [
@@ -69,6 +84,8 @@ const categoryOptions = [
 
 const Task = () => {
     const classes = useStyles();
+    const step = 1;
+    const totalSteps = 2;
 
     const [isCategoryChosen, setCategoryChosen] = useState(false);
     const [category, setCategory] = useState();
@@ -104,75 +121,85 @@ const Task = () => {
     }, []);
 
     return (
-        <div className={classes.wrapper}>
-            <Card>
-                <Typography className={classes.header} variant="h6">
-                    Выбор устройства
+        <>
+            <Header>
+                <Typography variant="h5">
+                    {`Часть ${step}/${totalSteps}. Практическое задание`}
                 </Typography>
-                <Select
-                    options={categoryOptions}
-                    value={category}
-                    onChange={onChangeCategory}
-                />
-            </Card>
-            <Slide
-                direction="down"
-                in={isCategoryChosen}
-                mountOnEnter
-                unmountOnExit
-            >
+                <button className={classes.finishTaskButton}>
+                    Завершить задание
+                </button>
+            </Header>
+            <div className={classes.wrapper}>
                 <Card>
-                    <button
-                        onClick={onClearCategory}
-                        className={cnb(classes.clearButton, classes.button)}
-                    >
-                        <ArrowBack />
-                    </button>
-                    <List
-                        items={category?.devices}
-                        onChange={onChangeDetailedCategory}
+                    <Typography className={classes.headerText} variant="h6">
+                        Выбор устройства
+                </Typography>
+                    <Select
+                        options={categoryOptions}
+                        value={category}
+                        onChange={onChangeCategory}
                     />
                 </Card>
-            </Slide>
-            <Slide
-                direction="down"
-                in={isDetailedDeviceChosen}
-                mountOnEnter
-                unmountOnExit
-            >
-                <Card>
-                    <Grid container direction="column" alignItems="center">
-                        <Grid container item alignItems="flex-start">
-                            <Typography variant="h6">
-                                {detailedDevice?.label}
-                            </Typography>
-                            <button
-                                onClick={onClearDetailedDevice}
-                                className={cnb(
-                                    classes.closeButton,
-                                    classes.button,
-                                )}
-                            >
-                                <Close className={classes.closeButtonIcon} />
-                            </button>
+                <Slide
+                    direction="down"
+                    in={isCategoryChosen}
+                    mountOnEnter
+                    unmountOnExit
+                >
+                    <Card>
+                        <button
+                            onClick={onClearCategory}
+                            className={cnb(classes.clearButton, classes.button)}
+                        >
+                            <ArrowBack />
+                        </button>
+                        <List
+                            items={category?.devices}
+                            onChange={onChangeDetailedCategory}
+                        />
+                    </Card>
+                </Slide>
+                <Slide
+                    direction="down"
+                    in={isDetailedDeviceChosen}
+                    mountOnEnter
+                    unmountOnExit
+                >
+                    <Card>
+                        <Grid container direction="column" alignItems="center">
+                            <Grid container item alignItems="flex-start">
+                                <Typography variant="h6">
+                                    {detailedDevice?.label}
+                                </Typography>
+                                <button
+                                    onClick={onClearDetailedDevice}
+                                    className={cnb(
+                                        classes.closeButton,
+                                        classes.button,
+                                    )}
+                                >
+                                    <Close className={classes.closeButtonIcon} />
+                                </button>
+                            </Grid>
+                            <Grid item>
+                                <img
+                                    src={detailedDevice?.img}
+                                    alt={detailedDevice?.label}
+                                    className={classes.deviceImage}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <p className={classes.deviceDetails}>
+                                    {detailedDevice?.details}
+                                </p>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <img
-                                src={detailedDevice?.img}
-                                alt={detailedDevice?.label}
-                                className={classes.deviceImage}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <p className={classes.deviceDetails}>
-                                {detailedDevice?.details}
-                            </p>
-                        </Grid>
-                    </Grid>
-                </Card>
-            </Slide>
-            <TaskPlayground />
-        </div>
+                    </Card>
+                </Slide>
+                <TaskPlayground />
+            </div>
+        </>
     );
 };
 
