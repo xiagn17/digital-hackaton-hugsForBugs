@@ -180,14 +180,14 @@ export default function Home() {
                         <LeftTable headerText="Задания на выполнение" backgroundColor="#2A5EA1">
                             <TableBody>
                                 {unfinishedTasks.map((task) => (
-                                    <Task task={task} type="unfinished" />
+                                    <Task key={task.name} task={task} type="unfinished" />
                                 ))}
                             </TableBody>
                         </LeftTable>
                         <RightTable headerText="Завершённые задачи" headerIcon={<DoneIcon />}>
                             <TableBody>
                                 {completedTasks.map((task) => (
-                                    <Task task={task} type="finished" rightAnswersCount={rightAnswersCount} />
+                                    <Task key={task.name} task={task} type="finished" rightAnswersCount={rightAnswersCount} />
                                 ))}
                             </TableBody>
                         </RightTable>
