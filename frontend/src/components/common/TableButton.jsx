@@ -18,11 +18,16 @@ line-height: 20px;
 color: #2A5EA1;
 
 outline: none;
+
+:hover {
+outline: none;
+cursor: pointer;
+}
 `;
 
-const TableButton = ({ onClick, children }) => {
+const TableButton = ({ onClick, children, className }) => {
     return (
-        <ButtonContainer onClick={onClick}>
+        <ButtonContainer onClick={onClick} className={className}>
             {children}
         </ButtonContainer>
     );
