@@ -5,6 +5,7 @@ import Routes from '../const/Routes';
 
 import HomePage from '../pages/Home';
 import LoginPage from '../pages/Login';
+import TaskPage from '../pages/Task';
 
 function makeRoute(route, Page = null) {
     return <Route exact path={route.path} component={Page} />;
@@ -16,6 +17,7 @@ export default function Router() {
             <Switch>
                 {makeRoute(Routes.home, HomePage)}
                 {makeRoute(Routes.login, LoginPage)}
+                {makeRoute(Routes.task, TaskPage)}
                 <Redirect exact to={Routes.login.path} />
             </Switch>
         </BrowserRouter>
