@@ -13,6 +13,11 @@ const DeviceInfo = forwardRef((props, ref) => {
         onAddDevice,
     } = props;
 
+    const onAddBtnClick = () => {
+        onAddDevice();
+        onClearDetailedDevice();
+    };
+
     return (
         <Card ref={ref}>
             <Grid container direction="column" alignItems="center">
@@ -39,7 +44,7 @@ const DeviceInfo = forwardRef((props, ref) => {
                         {detailedDevice?.details}
                     </p>
                 </Grid>
-                <Button className={classes.addBtn} onClick={onAddDevice}>
+                <Button className={classes.addBtn} onClick={onAddBtnClick}>
                     Добавить
                 </Button>
             </Grid>

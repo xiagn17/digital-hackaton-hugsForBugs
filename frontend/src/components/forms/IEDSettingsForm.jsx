@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button } from '@material-ui/core';
+import { TaskContext } from '../../context/TaskContext';
 
 import Form from '../../components/common/Form';
 import IpMaskInput from '../common/IpMaskInput';
@@ -22,19 +23,28 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+const logData = (data) => {
+    console.log(data);
+};
+
 const IEDSettingsForm = (props) => {
     const { device, onClose } = props;
+    const {
+        actions: { updateDevice },
+    } = useContext(TaskContext);
 
     const classes = useStyles();
 
-    const {
-        handleSubmit: onSubmitForm, control,
-    } = useForm({
+    const { handleSubmit: onSubmitForm, control } = useForm({
         defaultValues: device,
     });
 
+    const updateDeviceInfo = (IEDData) => {
+        updateDevice(device.id, IEDData);
+    };
+
     return (
-        <Form>
+        <Form onSubmit={onSubmitForm(updateDeviceInfo)}>
             <Controller
                 as={TextField}
                 variant="outlined"
@@ -114,7 +124,11 @@ const IEDSettingsForm = (props) => {
                 control={control}
                 required
                 className={classes.textField}
-                inputProps={{ className: classes.input, type: 'number', min: 0 }}
+                inputProps={{
+                    className: classes.input,
+                    type: 'number',
+                    min: 0,
+                }}
             />
             <Controller
                 as={TextField}
@@ -127,7 +141,11 @@ const IEDSettingsForm = (props) => {
                 control={control}
                 required
                 className={classes.textField}
-                inputProps={{ className: classes.input, type: 'number', min: 0 }}
+                inputProps={{
+                    className: classes.input,
+                    type: 'number',
+                    min: 0,
+                }}
             />
             <Button
                 type="submit"

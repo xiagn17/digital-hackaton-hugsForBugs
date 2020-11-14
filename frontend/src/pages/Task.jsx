@@ -11,7 +11,6 @@ import TaskPlayground from '../components/TaskPlayground';
 import Header from '../components/Header';
 import NetworkSettingsDialog from '../components/dialogs/NetworkSettingsDialog';
 import { useDialog } from '../hooks/useDialog';
-import IEDSettingsDialog from '../components/dialogs/IEDSettingsDialog';
 import { Device } from '../components/forms/GooseSettingsForm';
 import IEDDevice from '../entities/device/IEDDevice';
 import SelectDeviceModel from '../components/SelectDeviceModel';
