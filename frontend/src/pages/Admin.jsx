@@ -122,6 +122,13 @@ display:flex;
 flex-direction: column;
 width: 50%;
 `;
+const Separated2 = styled.div`
+display:flex;
+flex-direction: column;
+width: 50%;
+align-items: center;
+justify-content: center;
+`;
 const UserName = styled.div`
 font-weight: bold;
 font-size: 24px;
@@ -201,7 +208,9 @@ const Admin = () => {
                                 )}
                             </ClosedTasks>
                         </Separated>
-                        <Separated>Statistics</Separated>
+                        <Separated2>
+                            <img src={StatsAdmin2} alt="Stats3" />
+                        </Separated2>
                     </FlexContainerRow>
                 ) : (
                 <>

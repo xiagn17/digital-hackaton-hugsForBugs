@@ -9,6 +9,8 @@ import { ReactComponent as DeleteIcon } from '../assets/imgs/icons/delete.svg';
 import { ReactComponent as SettingsIcon } from '../assets/imgs/icons/settings.svg';
 import { cnb } from 'cnbuilder';
 import { PENDING, CONNECTED } from '../const/PORT_STATUS';
+import styled from 'styled-components';
+
 
 const useStyles = makeStyles(() => ({
     item: {
@@ -48,7 +50,19 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const Rza220 = ({ device }) => {
+const DeviceName = styled.div`
+position:absolute;
+top: -25px;
+right: -15px;
+z-index: 100;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 20px;
+color: #000000;
+`;
+
+const Rza220 = ({ device, deviceName }) => {
     const {
         actions: { removeDevice, resolveConnection },
     } = useContext(TaskContext);
@@ -61,6 +75,7 @@ const Rza220 = ({ device }) => {
 
     return (
         <div className={classes.item}>
+            <DeviceName>{deviceName}</DeviceName>
             <PlusIcon className={classes.icon} />
             <div className={classes.btnWrapper}>
                 <IconButton

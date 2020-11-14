@@ -8,7 +8,7 @@ const boxStyle = {
     height: 100,
 };
 
-const Device = ({ setCoordinates, device }) => {
+const Device = ({ setCoordinates, device, deviceIndex }) => {
     const onDrag = debounce((e, coordinates) => {
         if (device.subscriptions.length) {
             setCoordinates(coordinates);
@@ -29,6 +29,7 @@ const Device = ({ setCoordinates, device }) => {
         }
     }, 0);
 
+    const deviceName = deviceIndex > 0 && device.type === 'ied' ? device.type.toUpperCase() + deviceIndex : null;
     return (
         <Draggable
             onDrag={onDrag}
@@ -36,7 +37,7 @@ const Device = ({ setCoordinates, device }) => {
             defaultPosition={{ x: 400, y: 200 }}
         >
             <div style={boxStyle} className="box" id={device.id}>
-                <device.model.component device={device} />
+                <device.model.component device={device} deviceName={deviceName} />
             </div>
         </Draggable>
     );

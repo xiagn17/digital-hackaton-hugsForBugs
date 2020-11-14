@@ -1,16 +1,8 @@
 import React, { useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Device from './Device';
-import Draggable from 'react-draggable';
 import Xarrow from 'react-xarrows';
 import { IED } from '../entities/device/IEDDevice';
-
-const boxStyle = {
-    width: 100,
-    border: 'grey solid 2px',
-    borderRadius: '10px',
-    padding: '5px',
-};
 
 export default function TaskPlayground({ devices }) {
     const [coordinates, setCoordinates] = useState({});
@@ -39,12 +31,13 @@ export default function TaskPlayground({ devices }) {
             }}
         >
             {devices.map(
-                (device) =>
+                (device, i) =>
                     device?.model?.component && (
                         <Device
                             setCoordinates={setCoordinates}
                             key={device.id}
                             device={device}
+                            deviceIndex={i + 1}
                         />
                     ),
             )}
