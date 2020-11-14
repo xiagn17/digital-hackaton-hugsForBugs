@@ -5,6 +5,7 @@ class UserService {
     }
 
     async createUser(data) {
+        if (await this.userModel.findOne(data)) return null;
         const userDTO = {
             ...data,
             role: config.default.roles.USER
@@ -12,7 +13,8 @@ class UserService {
         return this.userModel.create(userDTO);
     }
 
-    createAdmin(data) {
+    async createAdmin(data) {
+        if (await this.userModel.findOne(data)) return null;
         const userDTO = {
             ...data,
             role: config.default.roles.ADMIN
