@@ -15,6 +15,7 @@ import SelectCategory from '../components/SelectCategory';
 import { DEVICE_TYPE_CONSTRUCTORS_MAP } from '../const/deviceTypes';
 import { useHistory } from 'react-router-dom';
 import Hint from '../components/common/Hint';
+import TaskDetails from './TaskDetails';
 
 const useStyles = makeStyles(() => ({
     dashboardWrapper: {
@@ -223,6 +224,16 @@ const Task = () => {
                 <TaskPlayground devices={devices} />
                 <Hint />
             </div>
+            <TaskDetails
+                title="Настройка IED на прием-передачу GOOSE-сообщений"
+                content={(
+                    <>
+                        <span>Задание состоит из практической и теоретической части (15 вопросов). </span>
+                        <br />
+                        <span>Ориентировочное время выполнения составит 20 минут.</span>
+                    </>
+                )}
+            />
         </>
     );
 };

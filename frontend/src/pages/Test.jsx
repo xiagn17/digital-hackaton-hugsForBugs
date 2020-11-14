@@ -3,12 +3,13 @@ import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components'
 import TestQuestions from '../TestQuestions';
-import {sendHttpRequest} from "../utils/sendHttpRequest";
-import {API_TEST_CREATE} from "../const/API_URL";
+import { sendHttpRequest } from "../utils/sendHttpRequest";
+import { API_TEST_CREATE } from "../const/API_URL";
 import Header from "../components/Header";
 import Routes from "../const/Routes";
+import TaskDetails from './TaskDetails';
 const icon = <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9.5 19C8.875 19 8.25 18.75 7.75 18.25L2.75 13.25C1.75 12.25 1.75 10.75 2.75 9.75C3.75 8.75 5.375 8.75 6.25 9.75L9.5 13L17.75 4.75C18.75 3.75 20.25 3.75 21.25 4.75C22.25 5.75 22.25 7.25 21.25 8.25L11.25 18.25C10.75 18.75 10.125 19 9.5 19Z" fill="white"/>
+    <path d="M9.5 19C8.875 19 8.25 18.75 7.75 18.25L2.75 13.25C1.75 12.25 1.75 10.75 2.75 9.75C3.75 8.75 5.375 8.75 6.25 9.75L9.5 13L17.75 4.75C18.75 3.75 20.25 3.75 21.25 4.75C22.25 5.75 22.25 7.25 21.25 8.25L11.25 18.25C10.75 18.75 10.125 19 9.5 19Z" fill="white" />
 </svg>;
 
 
@@ -70,8 +71,8 @@ line-height: 24px;
 color: ${props => props.withColor ? (props.isRight ? 'green' : 'red') : 'black'}
 `;
 
-const Question = ({data, onChangeAnswer, disabledInput, checkedAnswer, isRight, withColor}) => {
-    const {question, answers} = data;
+const Question = ({ data, onChangeAnswer, disabledInput, checkedAnswer, isRight, withColor }) => {
+    const { question, answers } = data;
     const onChange = (e) => {
         onChangeAnswer(e.target.value, e.target);
     };
@@ -140,7 +141,7 @@ function getRightAnswersCountByResults(results) {
         return acc;
     }, 0)
 }
-const Results = ({results}) => {
+const Results = ({ results }) => {
     const rightAnswers = getRightAnswersCountByResults(results);
 
     return (
@@ -237,24 +238,34 @@ const Test = () => {
                             const isRight = q.answers.filter(a => Number(a.number) === Number(answerNumber))[0].isRight;
                             return (
                                 <>
-                                    <div style={{marginBottom: '10px', marginTop: '70px'}}>Вопрос {q.id}</div>
-                                    <Question data={q} disabledInput={true} checkedAnswer={answerNumber} isRight={isRight} withColor={true}/>
+                                    <div style={{ marginBottom: '10px', marginTop: '70px' }}>Вопрос {q.id}</div>
+                                    <Question data={q} disabledInput={true} checkedAnswer={answerNumber} isRight={isRight} withColor={true} />
                                 </>
                             );
                         })}
                     </>
                 ) : (
+                        <>
+                            <Circles>{TestQuestions.map(({ id }) => {
+                                return (
+                                    <Circle key={id} current={id === currentQuestion}>{currentQuestion > id ? icon : id}</Circle>
+                                );
+                            })}</Circles>
+                            <Question data={TestQuestions.filter(({ id }) => id === currentQuestion)[0]} onChangeAnswer={onChangeAnswer} />
+                            <NextQuestion disabled={currentAnswer === 0} onClick={onNextQuestion}>{questionsNumber === currentQuestion ? 'Узнать результат' : 'Следующий вопрос'}</NextQuestion>
+                        </>
+                    )}
+            </Container>
+            <TaskDetails
+                title="Настройка IED на прием-передачу GOOSE-сообщений"
+                content={(
                     <>
-                        <Circles>{TestQuestions.map(({id}) => {
-                            return (
-                                <Circle key={id} current={id === currentQuestion}>{currentQuestion > id ? icon : id}</Circle>
-                            );
-                        })}</Circles>
-                        <Question data={TestQuestions.filter(({id}) => id === currentQuestion)[0]} onChangeAnswer={onChangeAnswer}/>
-                        <NextQuestion disabled={currentAnswer === 0} onClick={onNextQuestion}>{questionsNumber === currentQuestion ? 'Узнать результат' : 'Следующий вопрос'}</NextQuestion>
+                        <span>Задание состоит из практической и теоретической части (15 вопросов). </span>
+                        <br />
+                        <span>Ориентировочное время выполнения составит 20 минут.</span>
                     </>
                 )}
-            </Container>
+            />
         </>
     );
 };
