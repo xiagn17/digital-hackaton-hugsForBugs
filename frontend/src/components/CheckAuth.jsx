@@ -29,12 +29,13 @@ export default function CheckRoomAuth({
         actions: { onGetMe },
         getMeRequestState,
         loginRequestState,
+        logoutRequestState,
     } = useContext(UserContext);
     const { routeRole = [] } = route;
 
     const IS_ROUTE_ALLOWED = useMemo(
         () => isRouteAllowed(routeRole, getMeRequestState.result || user),
-        [getMeRequestState.result, routeRole],
+        [getMeRequestState.result, user, routeRole],
     );
 
     useEffect(() => {
@@ -50,7 +51,8 @@ export default function CheckRoomAuth({
 
     if (
         (isRequestFinished(getMeRequestState.status) ||
-            isRequestFinished(loginRequestState.status)) &&
+            isRequestFinished(loginRequestState.status) ||
+            isRequestFinished(logoutRequestState.status)) &&
         !IS_ROUTE_ALLOWED
     ) {
         return <Redirect to={routes.login.path} />;

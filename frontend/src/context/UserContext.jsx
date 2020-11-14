@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useRequest } from '../hooks/useRequest';
-import { API_LOGIN, API_ME } from '../const/API_URL';
+import { API_LOGIN, API_ME, API_LOGOUT } from '../const/API_URL';
 import { HTTP_REQUEST_METHODS } from '../const/HTTP_REQUEST_METHODS';
 import {
     isRequestFailed,
@@ -27,8 +27,8 @@ const UserContextProvider = (props) => {
     });
 
     const { state: logoutRequestState, onRequest: onLogout } = useRequest({
-        url: API_LOGIN,
-        method: HTTP_REQUEST_METHODS.DELETE,
+        url: API_LOGOUT,
+        method: HTTP_REQUEST_METHODS.POST,
     });
 
     const { state: getMeRequestState, onRequest: onGetMe } = useRequest({
