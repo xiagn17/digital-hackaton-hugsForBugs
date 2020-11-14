@@ -66,7 +66,7 @@ export default function TaskPlayground({ devices }) {
                 );
             })}
             <GooseSettings devices={devices}/>
-        </div>
+        </Container>
     );
 }
 
