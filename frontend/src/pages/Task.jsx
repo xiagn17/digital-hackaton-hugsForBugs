@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TaskContext } from '../context/TaskContext';
 
 import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
+import { MODELS as SWITCHER_MODELS } from '../entities/device/SwitchDevice';
 import TaskPlayground from '../components/TaskPlayground';
 import Header from '../components/Header';
 import NetworkSettingsDialog from '../components/dialogs/NetworkSettingsDialog';
@@ -103,7 +104,7 @@ const categoryOptions = [
     {
         label: 'Промышленные коммутаторы',
         value: 2,
-        devices: [],
+        devices: SWITCHER_MODELS,
     },
     {
         label: 'Подключения',
@@ -117,7 +118,10 @@ const Task = () => {
     const step = 1;
     const totalSteps = 2;
 
-    const taskType = useMemo(() => step === 1 ? 'Практическое' : 'Теоретическое', [step]);
+    const taskType = useMemo(
+        () => (step === 1 ? 'Практическое' : 'Теоретическое'),
+        [step],
+    );
 
     const {
         state: { devices },
@@ -135,10 +139,14 @@ const Task = () => {
 
     const onAddDevice = useCallback(() => {
         const currentModel = detailedDevice;
-        const DeviceConstructor =
-            DEVICE_TYPE_CONSTRUCTORS_MAP[currentModel.type];
-        const device = new DeviceConstructor('bro', currentModel);
-        addDevice(device);
+
+        if (currentModel.component) {
+            const DeviceConstructor =
+                DEVICE_TYPE_CONSTRUCTORS_MAP[currentModel.type];
+
+            const device = new DeviceConstructor('device', currentModel);
+            addDevice(device);
+        }
     }, [detailedDevice]);
 
     const onClearDetailedDevice = useCallback(() => {
@@ -168,7 +176,6 @@ const Task = () => {
         setDetailedDevice(value);
         setDetailedDeviceChosen(true);
     }, []);
-    console.log({devices})
 
     return (
         <>
@@ -194,6 +201,7 @@ const Task = () => {
                     unmountOnExit
                 >
                     <SelectDeviceModel
+                        detailedDevice={detailedDevice}
                         category={category}
                         onChangeDevice={onChangeDetailedDevice}
                         onClearCategory={onClearCategory}
@@ -209,6 +217,7 @@ const Task = () => {
                     <DeviceInfo
                         detailedDevice={detailedDevice}
                         onClearDetailedDevice={onClearDetailedDevice}
+                        onAddDevice={onAddDevice}
                         classes={classes}
                     />
                 </Slide>
