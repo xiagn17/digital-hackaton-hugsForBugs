@@ -33,9 +33,9 @@ export default function TaskPlayground({ devices }) {
             }}
         >
             {devices.map(
-                (device) =>
+                (device, i) =>
                     device?.model?.component && (
-                        <Device key={device.id} device={device} onDrag={onDrag} />
+                        <Device key={device.id} device={device} onDrag={onDrag} deviceIndex={i + 1} />
                     ),
             )}
         </div>

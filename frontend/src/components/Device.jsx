@@ -10,7 +10,8 @@ const boxStyle = {
     // padding: '5px',
 };
 
-const Device = ({ onDrag, device }) => {
+const Device = ({ onDrag, device, deviceIndex }) => {
+    const deviceName = deviceIndex > 0 && device.type === 'ied' ? device.type.toUpperCase() + deviceIndex : null;
     return (
         <Draggable
             onDrag={onDrag}
@@ -18,7 +19,7 @@ const Device = ({ onDrag, device }) => {
             defaultPosition={{ x: 400, y: 200 }}
         >
             <div style={boxStyle} className="box" id={device.id}>
-                <device.model.component device={device} />
+                <device.model.component device={device} deviceName={deviceName} />
             </div>
         </Draggable>
     );
