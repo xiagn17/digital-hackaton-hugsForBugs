@@ -42,6 +42,7 @@ border: 1px solid ${props => props.borderColor || '#59856A'};
 border-bottom-left-radius: 8px;
 border-bottom-right-radius: 8px;
 width: 100%;
+height: 100%;
 min-height: 200px;
 padding: 20px 24px;
 `;
