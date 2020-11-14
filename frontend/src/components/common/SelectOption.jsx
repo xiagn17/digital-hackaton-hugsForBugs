@@ -13,6 +13,7 @@ const useStyles = makeStyles(() => ({
         borderRadius: 24,
         marginBottom: 16,
         outline: 0,
+        cursor: 'pointer',
     },
     active: {
         backgroundColor: '#2A5EA1',

@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { cnb } from 'cnbuilder';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
+import { ReactComponent as CloseIcon } from '../assets/imgs/icons/close.svg';
 
 import Card from './common/Card';
 
@@ -29,7 +29,7 @@ const DeviceInfo = forwardRef((props, ref) => {
                         onClick={onClearDetailedDevice}
                         className={cnb(classes.closeButton, classes.button)}
                     >
-                        <Close className={classes.closeButtonIcon} />
+                        <CloseIcon className={classes.closeButtonIcon} />
                     </button>
                 </Grid>
                 <Grid item>

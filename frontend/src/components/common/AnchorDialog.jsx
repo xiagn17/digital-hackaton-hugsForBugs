@@ -39,6 +39,7 @@ const AnchorDialog = (props) => {
             anchorOrigin={anchorOrigin}
             transformOrigin={transformOrigin}
             marginThreshold={marginThreshold}
+            container={anchorEl?.parentNode}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...other}
         >

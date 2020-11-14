@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
-import { Close } from '@material-ui/icons';
+import { ReactComponent as CloseIcon } from '../../assets/imgs/icons/close.svg';
 
 import IEDSettingsForm from '../forms/IEDSettingsForm';
 
@@ -66,7 +66,7 @@ const IEDSettingsDialog = (props) => {
                 <Grid container alignItems="center" justify="space-between">
                     <Grid item>
                         <Typography className={classes.header} variant="h5">
-                            Настройка IED 1
+                            {device.name}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -74,7 +74,7 @@ const IEDSettingsDialog = (props) => {
                             onClick={onClose}
                             className={cnb(classes.closeButton, classes.button)}
                         >
-                            <Close className={classes.closeButtonIcon} />
+                            <CloseIcon className={classes.closeButtonIcon} />
                         </button>
                     </Grid>
                 </Grid>
