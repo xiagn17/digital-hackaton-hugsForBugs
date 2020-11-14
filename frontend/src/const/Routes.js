@@ -14,6 +14,7 @@ const routes = {
     login: { path: '/' },
     task: { path: '/task', routeRole: ROUTE_ROLES.authOnlyUser },
     test: { path: '/test', routeRole: ROUTE_ROLES.authOnlyUser },
+    admin: { path: '/admin', routeRole: ROUTE_ROLES.authOnlyAdmin },
 };
 
 export const isAuthNone = (routeRole) =>

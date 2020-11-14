@@ -125,8 +125,8 @@ color: #2A5EA1;
 margin-bottom: 60px;
 `;
 
-const Results = ({results}) => {
-    const rightAnswers = TestQuestions.reduce((acc, cur) => {
+function getRightAnswersCountByResults(results) {
+    return TestQuestions.reduce((acc, cur) => {
         const curId = cur.id;
         const answerNumber = results[curId];
         const answer = cur.answers.find(a => Number(a.number) === Number(answerNumber));
@@ -136,6 +136,9 @@ const Results = ({results}) => {
         }
         return acc;
     }, 0)
+}
+const Results = ({results}) => {
+    const rightAnswers = getRightAnswersCountByResults(results);
 
     return (
         <ResultsText>Результат: {rightAnswers} правильных ответов из {TestQuestions.length}</ResultsText>
@@ -149,10 +152,15 @@ const Test = () => {
     const [isFinished, setFinished] = useState(false);
     const [radioBut, setRadioBut] = useState(null);
 
-    const sendToServer = async (res) => {
+    const sendToServer = async (res, rightAnswersCount) => {
         const sendTest = await sendHttpRequest({
             url: API_TEST_CREATE,
-            data: { results: res },
+            data: {
+                results: {
+                    ...res,
+                    rightAnswersCount
+                }
+            },
             method: 'POST',
         });
     };
@@ -168,7 +176,7 @@ const Test = () => {
         setResults(res);
         if (questionsNumber === currentQuestion) {
             setFinished(true);
-            sendToServer(res);
+            sendToServer(res, getRightAnswersCountByResults(res));
             return;
         }
         setQuestion(currentQuestion + 1);
