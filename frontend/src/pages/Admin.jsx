@@ -10,6 +10,7 @@ import TableButton from "../components/common/TableButton";
 import StatsAdmin1 from '../assets/imgs/admin_stats.png';
 import StatsAdmin2 from '../assets/imgs/admin_round.png';
 import TestQuestions from "../TestQuestions";
+import { TaskInfo } from "./Home";
 
 const profileIcon = <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M16 6C16 9.31371 13.7614 12 11 12C8.23858 12 6 9.31371 6 6C6 2.68629 8.23858 0 11 0C13.7614 0 16 2.68629 16 6Z" fill="white"/>
@@ -117,6 +118,10 @@ margin-bottom: 16px;
 `;
 
 
+const UserInfo = styled.div`
+display: flex;
+flex-direction: column;
+`;
 const Admin = () => {
     const [statistics, setStatistics] = useState([]);
     const [users, setUsers] = useState([]);
@@ -151,7 +156,11 @@ const Admin = () => {
                             <UserName>{userToShow.fullName}, группа {userToShow.groupId}</UserName>
                             <ClosedTasks>
                                 <ClosedTasksTitle>Завершенные задания</ClosedTasksTitle>
-                                <div>Тестовая часть: {userStatistics.results?.rightAnswersCount} правильных ответов из {TestQuestions.length}</div>
+                                {userStatistics.results?.rightAnswersCount && (
+                                    <TaskInfo task={{
+                                        name: 'Настройка IED на прием- передачу GOOSE-сообщений',
+                                    }} type="finished" rightAnswersCount={userStatistics.results?.rightAnswersCount} />
+                                )}
                             </ClosedTasks>
                         </Separated>
                         <Separated>Statistics</Separated>

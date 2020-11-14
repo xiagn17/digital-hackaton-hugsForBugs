@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import DotIcon from '@material-ui/icons/FiberManualRecord';
 import Done from '@material-ui/icons/Done';
 import styled from 'styled-components'
@@ -8,6 +8,9 @@ import Page from '../components/Page';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Routes from "../const/Routes";
+import TestQuestions from "../TestQuestions";
+import {sendHttpRequest} from "../utils/sendHttpRequest";
+import {API_TEST_CREATE, API_TEST_GET} from "../const/API_URL";
 
 const unfinishedTasks = [
     {
@@ -18,7 +21,7 @@ const unfinishedTasks = [
 
 const completedTasks = [
     {
-        name: 'Настройка IRD на прием- передачу GOOSE-сообщений',
+        name: 'Настройка IED на прием- передачу GOOSE-сообщений',
         url: '/task',
         errors: {
             theory: 2,
@@ -107,7 +110,7 @@ const DashboardHeader = () => {
 };
 
 const Task = (props) => {
-    const { task: { name, url }, type } = props;
+    const { task: { name, url }, rightAnswersCount, type } = props;
 
     const goToTask = () => {
         history.push(Routes.task.path)
@@ -116,6 +119,9 @@ const Task = (props) => {
     const history = useHistory();
 
     if (type === 'finished') {
+        if (!rightAnswersCount) {
+            return null;
+        }
         return (
             <Grid container direction="column">
                 <Grid item container alignItems="flex-start">
@@ -127,11 +133,11 @@ const Task = (props) => {
                     </NameGridItem>
                 </Grid>
                 <ErrorsGridContainer item container direction="column">
+                    {/*<Grid item>*/}
+                    {/*    Практическая часть: 2 ошибки*/}
+                    {/*</Grid>*/}
                     <Grid item>
-                        Практическая часть: 2 ошибки
-                    </Grid>
-                    <Grid item>
-                        Тестовая часть: 1 ошибка
+                        Тестовая часть: {rightAnswersCount} правильных ответов из {TestQuestions.length}
                     </Grid>
                 </ErrorsGridContainer>
             </Grid>
@@ -154,10 +160,18 @@ const Task = (props) => {
         </Grid>
     );
 };
-
+export {Task as TaskInfo};
 export default function Home() {
+    const [ownStats, setOwnStats] = useState({});
+    useEffect(async () => {
+        const stats = await sendHttpRequest({
+            url: API_TEST_GET,
+            method: 'GET',
+        });
+        setOwnStats(stats)
+    }, []);
 
-
+    const rightAnswersCount = ownStats?.results?.rightAnswersCount;
     return (
         <Page headerContent={<DashboardHeader />}>
             <DashboardWrapper>
@@ -173,7 +187,7 @@ export default function Home() {
                         <RightTable headerText="Завершённые задачи" headerIcon={<DoneIcon />}>
                             <TableBody>
                                 {completedTasks.map((task) => (
-                                    <Task task={task} type="finished" />
+                                    <Task task={task} type="finished" rightAnswersCount={rightAnswersCount} />
                                 ))}
                             </TableBody>
                         </RightTable>

@@ -11,7 +11,7 @@ router.post('/create', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
     const {user} = req;
-    const results = await TestResultsService.getByUser(user);
+    const results = await TestResultsService.getByUser(user) || {};
     console.log(results);
     res.send(results);
 });

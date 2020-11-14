@@ -7,4 +7,5 @@ export const API_ALL = `${API_AUTH}/all`;
 
 export const API_TEST = 'testResults'
 export const API_TEST_CREATE = `${API_TEST}/create`;
+export const API_TEST_GET = `${API_TEST}/`;
 export const API_TEST_GETALL = `${API_TEST}/all`;
