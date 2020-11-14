@@ -2,9 +2,13 @@ const fsp = require('fs').promises;
 const path = require('path');
 const camelCase = require('camelcase');
 const _ = require('lodash');
+const dotenv = require('dotenv');
 
 module.exports = {
     readConfig: async () => {
+        // выгрузить из .env файлов в process.env
+        dotenv.config()
+
         const files = await fsp.readdir(__dirname);
         const configurations = files.filter((f) => !f.includes('index'));
         const defaultConfig = configurations.reduce((acc, cur) => {
