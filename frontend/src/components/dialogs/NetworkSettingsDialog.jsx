@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
-import { Close } from '@material-ui/icons';
+import { ReactComponent as CloseIcon } from '../../assets/imgs/icons/close.svg';
 import NetworkSettingsForm from '../forms/NetworkSettingsForm';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -43,6 +43,7 @@ const useStyles = makeStyles(() => ({
     closeButtonIcon: {
         width: '1.2em',
         height: '1.2em',
+        transform: 'translateY(3px)',
     },
 }));
 
@@ -73,7 +74,7 @@ const NetworkSettingsDialog = (props) => {
                             onClick={onClose}
                             className={cnb(classes.closeButton, classes.button)}
                         >
-                            <Close className={classes.closeButtonIcon} />
+                            <CloseIcon className={classes.closeButtonIcon} />
                         </button>
                     </Grid>
                 </Grid>

@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useContext, useMemo } from 'react';
-import Draggable from 'react-draggable';
 import Slide from '@material-ui/core/Slide';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,16 +9,12 @@ import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
 import { MODELS as SWITCHER_MODELS } from '../entities/device/SwitchDevice';
 import TaskPlayground from '../components/TaskPlayground';
 import Header from '../components/Header';
-import NetworkSettingsDialog from '../components/dialogs/NetworkSettingsDialog';
-import { useDialog } from '../hooks/useDialog';
-import { Device } from '../components/forms/GooseSettingsForm';
-import IEDDevice from '../entities/device/IEDDevice';
 import SelectDeviceModel from '../components/SelectDeviceModel';
 import DeviceInfo from '../components/DeviceInfo';
 import SelectCategory from '../components/SelectCategory';
-import GooseSettingsDialog from '../components/dialogs/GooseSettingsDialog';
 import { DEVICE_TYPE_CONSTRUCTORS_MAP } from '../const/deviceTypes';
 import { useHistory } from 'react-router-dom';
+import Hint from '../components/common/Hint';
 
 const useStyles = makeStyles(() => ({
     dashboardWrapper: {
@@ -58,6 +53,7 @@ const useStyles = makeStyles(() => ({
     closeButtonIcon: {
         width: '1.2em',
         height: '1.2em',
+        transform: 'translateY(3px)',
     },
     deviceImage: {
         objectFit: 'contain',
@@ -134,10 +130,6 @@ const Task = () => {
     const [isDetailedDeviceChosen, setDetailedDeviceChosen] = useState(false);
     const [detailedDevice, setDetailedDevice] = useState();
 
-    const networkSettingsDialog = useDialog();
-    const iedSettingsDialog = useDialog();
-    const gooseSettingsDialog = useDialog();
-
     const onAddDevice = useCallback(() => {
         const currentModel = detailedDevice;
 
@@ -145,7 +137,7 @@ const Task = () => {
             const DeviceConstructor =
                 DEVICE_TYPE_CONSTRUCTORS_MAP[currentModel.type];
 
-            const device = new DeviceConstructor('device', currentModel);
+            const device = new DeviceConstructor(`${currentModel.label}-${devices.length + 1}`, currentModel);
             addDevice(device);
         }
     }, [detailedDevice]);
@@ -229,6 +221,7 @@ const Task = () => {
                     />
                 </Slide>
                 <TaskPlayground devices={devices} />
+                <Hint />
             </div>
         </>
     );

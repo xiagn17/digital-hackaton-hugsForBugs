@@ -3,7 +3,7 @@ import { cnb } from 'cnbuilder';
 import { Dialog, DialogTitle, DialogContent, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
-import { Close } from '@material-ui/icons';
+import { ReactComponent as CloseIcon } from '../../assets/imgs/icons/close.svg';
 
 import GooseSettingsForm from '../forms/GooseSettingsForm';
 
@@ -42,6 +42,7 @@ const useStyles = makeStyles(() => ({
     closeButtonIcon: {
         width: '1.2em',
         height: '1.2em',
+        transform: 'translateY(3px)',
     },
 }));
 
@@ -73,7 +74,7 @@ const GooseSettingsDialog = (props) => {
                             onClick={onClose}
                             className={cnb(classes.closeButton, classes.button)}
                         >
-                            <Close className={classes.closeButtonIcon} />
+                            <CloseIcon className={classes.closeButtonIcon} />
                         </button>
                     </Grid>
                 </Grid>

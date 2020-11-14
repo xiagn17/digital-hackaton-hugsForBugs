@@ -35,7 +35,7 @@ export default function TaskPlayground({ devices }) {
             {devices.map(
                 (device) =>
                     device?.model?.component && (
-                        <Device device={device} onDrag={onDrag} />
+                        <Device key={device.id} device={device} onDrag={onDrag} />
                     ),
             )}
         </div>
