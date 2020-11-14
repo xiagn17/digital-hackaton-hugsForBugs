@@ -10,6 +10,15 @@ services:
       - target: 4000
         published: 4001
 
+  frontend:
+    build: ../frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - target: 80
+        published: 3001
+
   mongo:
     image: mongo:latest
     restart: always
