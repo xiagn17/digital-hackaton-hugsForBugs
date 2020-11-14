@@ -32,6 +32,7 @@ const useStyles = makeStyles(() => ({
     wrapper: {
         display: 'flex',
         alignItems: 'flex-start',
+        height: 'calc(100vh - 70px)'
     },
     menu: {
         position: 'relative',
