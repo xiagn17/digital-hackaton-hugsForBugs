@@ -32,9 +32,12 @@ export default function TaskPlayground({ devices }) {
                 position: 'absolute',
             }}
         >
-            {devices.map((device) => (
-                <Device device={device} onDrag={onDrag} />
-            ))}
+            {devices.map(
+                (device) =>
+                    device?.model?.component && (
+                        <Device device={device} onDrag={onDrag} />
+                    ),
+            )}
         </div>
     );
 }
