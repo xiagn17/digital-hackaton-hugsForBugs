@@ -18,7 +18,6 @@ const localStrategy = new LocalStrategy({
         usernameField: 'fullName',
         passwordField: 'groupId'
     },
-    console.log('waht');
     async (fullName, groupId, done) => {
         console.log(fullName, groupId);
         const userDTO = await UserService.signIn({ fullName, groupId });

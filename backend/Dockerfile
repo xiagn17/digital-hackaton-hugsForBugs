@@ -1,8 +1,8 @@
 FROM node:14.15.0-alpine
 
-WORKDIR app
+WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 
 COPY . .

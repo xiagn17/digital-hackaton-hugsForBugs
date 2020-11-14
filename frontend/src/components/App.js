@@ -1,13 +1,16 @@
 import React from 'react';
 import Router from './Router';
 import { UserContextProvider } from '../context/UserContext';
+import { TaskContextProvider } from '../context/TaskContext';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {
     return (
         <UserContextProvider>
-            <CssBaseline />
-            <Router />
+            <TaskContextProvider>
+                <CssBaseline />
+                <Router />
+            </TaskContextProvider>
         </UserContextProvider>
     );
 }

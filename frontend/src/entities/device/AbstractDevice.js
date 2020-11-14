@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 class AbstractDevice {
     constructor(name, model, type) {
-        this.id = new uuidv4();
+        this.id = uuidv4();
         this.name = name;
         this.type = type;
         this.model = model;

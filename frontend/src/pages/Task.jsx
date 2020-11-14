@@ -1,18 +1,20 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { cnb } from 'cnbuilder';
 import Slide from '@material-ui/core/Slide';
-import { Typography, Grid } from '@material-ui/core';
+import { Typography, Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowBack, Close } from '@material-ui/icons';
-import Page from '../components/Page';
+import { TaskContext } from '../context/TaskContext';
 
 import Select from '../components/Select';
 import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
 import List from '../components/List';
 import Card from '../components/Card';
 import TaskPlayground from '../components/TaskPlayground';
+import Header from '../components/Header';
+import { DEVICE_TYPE_CONSTRUCTORS_MAP } from '../const/deviceTypes';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     dashboardWrapper: {
         backgroundColor: '#F3F3F3',
         height: '100%',
@@ -20,13 +22,17 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'flex-start',
     },
-    header: {
+    headerText: {
         color: '#2A5EA1',
         marginBottom: 24,
     },
     wrapper: {
         display: 'flex',
         alignItems: 'flex-start',
+    },
+    menu: {
+        position: 'relative',
+        zIndex: 401,
     },
     button: {
         paddingLeft: 0,
@@ -54,6 +60,33 @@ const useStyles = makeStyles((theme) => ({
     deviceDetails: {
         maxWidth: 400,
     },
+    finishTaskButton: {
+        backgroundColor: 'transparent',
+        border: '1px solid #2A5EA1',
+        boxSizing: 'border-box',
+        borderRadius: 24,
+        padding: '8px 24px',
+        fontSize: 16,
+        cursor: 'pointer',
+        transition: '150ms all ease-in-out',
+        '&:hover': {
+            backgroundColor: '#2A5EA1',
+            color: '#fff',
+        },
+    },
+    addBtn: {
+        display: 'block',
+        minWidth: 121,
+        margin: '0 auto',
+        textTransform: 'capitalize',
+        backgroundColor: '#2A5EA1',
+        borderRadius: 24,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#2A5EA1',
+            color: 'white',
+        },
+    },
 }));
 
 const categoryOptions = [
@@ -74,21 +107,27 @@ const categoryOptions = [
     },
 ];
 
-const DashboardHeader = () => {
-    return (
-        <>
-            <Typography>Практическое задание 1/2</Typography>
-        </>
-    );
-};
-
 const Task = () => {
     const classes = useStyles();
+    const step = 1;
+    const totalSteps = 2;
+    const {
+        state: { devices },
+        actions: { addDevice },
+    } = useContext(TaskContext);
 
     const [isCategoryChosen, setCategoryChosen] = useState(false);
     const [category, setCategory] = useState();
     const [isDetailedDeviceChosen, setDetailedDeviceChosen] = useState(false);
     const [detailedDevice, setDetailedDevice] = useState();
+
+    const onAddDevice = useCallback(() => {
+        const currentModel = detailedDevice;
+        const DeviceConstructor =
+            DEVICE_TYPE_CONSTRUCTORS_MAP[currentModel.type];
+        const device = new DeviceConstructor('bro', currentModel);
+        addDevice(device);
+    }, [detailedDevice]);
 
     const onClearDetailedDevice = useCallback(() => {
         setDetailedDeviceChosen(false);
@@ -119,10 +158,18 @@ const Task = () => {
     }, []);
 
     return (
-        <Page headerContent={<DashboardHeader />}>
+        <>
+            <Header>
+                <Typography variant="h5">
+                    {`Часть ${step}/${totalSteps}. Практическое задание`}
+                </Typography>
+                <button className={classes.finishTaskButton}>
+                    Завершить задание
+                </button>
+            </Header>
             <div className={classes.wrapper}>
-                <Card>
-                    <Typography className={classes.header} variant="h6">
+                <Card className={classes.menu}>
+                    <Typography className={classes.headerText} variant="h6">
                         Выбор устройства
                     </Typography>
                     <Select
@@ -137,16 +184,17 @@ const Task = () => {
                     mountOnEnter
                     unmountOnExit
                 >
-                    <Card>
+                    <Card className={classes.menu}>
                         <button
                             onClick={onClearCategory}
                             className={cnb(classes.clearButton, classes.button)}
                         >
                             <ArrowBack />
                         </button>
-                        <List
-                            items={category?.devices}
+                        <Select
+                            options={category?.devices || []}
                             onChange={onChangeDetailedCategory}
+                            value={detailedDevice}
                         />
                     </Card>
                 </Slide>
@@ -156,7 +204,7 @@ const Task = () => {
                     mountOnEnter
                     unmountOnExit
                 >
-                    <Card>
+                    <Card className={classes.menu}>
                         <Grid container direction="column" alignItems="center">
                             <Grid container item alignItems="flex-start">
                                 <Typography variant="h6">
@@ -187,11 +235,17 @@ const Task = () => {
                                 </p>
                             </Grid>
                         </Grid>
+                        <Button
+                            className={classes.addBtn}
+                            onClick={onAddDevice}
+                        >
+                            Добавить
+                        </Button>
                     </Card>
                 </Slide>
-                <TaskPlayground />
+                <TaskPlayground devices={devices} />
             </div>
-        </Page>
+        </>
     );
 };
 

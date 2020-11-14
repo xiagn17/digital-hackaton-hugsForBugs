@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { forwardRef } from 'react';
+import { cnb } from 'cnbuilder';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -11,17 +12,18 @@ const useStyles = makeStyles(() => ({
         borderRadius: 8,
         padding: 24,
         margin: 16,
-    }
+    },
 }));
 
-const Card = forwardRef(({ children }, ref) => {
+const Card = forwardRef(({ children, className }, ref) => {
     const classes = useStyles();
+    const cardRootClassName = cnb(classes.root, className);
 
     return (
-        <div className={classes.root} ref={ref}>
+        <div className={cardRootClassName} ref={ref}>
             {children}
         </div>
-    )
+    );
 });
 
 Card.propTypes = {
