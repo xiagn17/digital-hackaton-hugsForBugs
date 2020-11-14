@@ -1,6 +1,15 @@
 version: "3.7"
 
 services:
+  backend:
+    build: .
+    restart: always
+    environment:
+      - MONGO_URL=mongo:27017
+    ports:
+      - target: 4000
+        published: 4001
+
   mongo:
     image: mongo:latest
     restart: always
