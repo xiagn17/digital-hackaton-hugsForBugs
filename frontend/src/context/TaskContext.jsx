@@ -11,6 +11,8 @@ const TaskContextProvider = (props) => {
         step: 1,
     });
 
+    console.log(state.devices);
+
     const addDevice = (device) => {
         setState((prevState) => {
             const devicesCopy = [...prevState.devices, device];
@@ -37,9 +39,31 @@ const TaskContextProvider = (props) => {
         });
     };
 
+    const updateDevice = (deviceId, deviceData) => {
+        setState((prevState) => {
+            const devicesCopy = [...prevState.devices];
+            const deviceToUpdateIndex = devicesCopy.findIndex(
+                (device) => device.id === deviceId,
+            );
+
+            const updatedDevice = {
+                ...devicesCopy[deviceToUpdateIndex],
+                ...deviceData,
+            };
+            devicesCopy[deviceToUpdateIndex] = updatedDevice;
+
+            console.log(devicesCopy);
+            return {
+                ...prevState,
+                devices: devicesCopy,
+            };
+        });
+    };
+
     const actions = {
         addDevice,
         removeDevice,
+        updateDevice,
     };
 
     return (
