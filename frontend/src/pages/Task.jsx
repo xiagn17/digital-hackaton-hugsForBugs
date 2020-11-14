@@ -1,17 +1,21 @@
 import React, { useState, useCallback } from 'react';
 import Draggable from 'react-draggable';
-import { cnb } from 'cnbuilder';
 import Slide from '@material-ui/core/Slide';
-import { Typography, Grid } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ArrowBack, Close } from '@material-ui/icons';
 
-import Select from '../components/Select';
 import { MODELS as EID_MODELS } from '../entities/device/IEDDevice';
-import List from '../components/List';
-import Card from '../components/Card';
 import TaskPlayground from '../components/TaskPlayground';
 import Header from '../components/Header';
+import NetworkSettingsDialog from '../components/dialogs/NetworkSettingsDialog';
+import { useDialog } from '../hooks/useDialog';
+import IEDSettingsDialog from '../components/dialogs/IEDSettingsDialog';
+import { Device } from '../components/forms/GooseSettingsForm';
+import IEDDevice from '../entities/device/IEDDevice';
+import SelectDeviceModel from '../components/SelectDeviceModel';
+import DeviceInfo from '../components/DeviceInfo';
+import SelectCategory from '../components/SelectCategory';
+import GooseSettingsDialog from '../components/dialogs/GooseSettingsDialog';
 
 const useStyles = makeStyles((theme) => ({
     headerText: {
@@ -92,6 +96,10 @@ const Task = () => {
     const [isDetailedDeviceChosen, setDetailedDeviceChosen] = useState(false);
     const [detailedDevice, setDetailedDevice] = useState();
 
+    const networkSettingsDialog = useDialog();
+    const iedSettingsDialog = useDialog();
+    const gooseSettingsDialog = useDialog();
+
     const onClearDetailedDevice = useCallback(() => {
         setDetailedDeviceChosen(false);
 
@@ -115,10 +123,19 @@ const Task = () => {
         setCategoryChosen(true);
     }, []);
 
-    const onChangeDetailedCategory = useCallback((value) => {
+    const onChangeDetailedDevice = useCallback((value) => {
         setDetailedDevice(value);
         setDetailedDeviceChosen(true);
     }, []);
+
+    const device1 = new IEDDevice('device-1', 0);
+    const device2 = new IEDDevice('device-2', 0);
+
+    device1.linkTo(device2);
+    console.log({
+        device1,
+        device2,
+    })
 
     return (
         <>
@@ -131,34 +148,24 @@ const Task = () => {
                 </button>
             </Header>
             <div className={classes.wrapper}>
-                <Card>
-                    <Typography className={classes.headerText} variant="h6">
-                        Выбор устройства
-                </Typography>
-                    <Select
-                        options={categoryOptions}
-                        value={category}
-                        onChange={onChangeCategory}
-                    />
-                </Card>
+                <SelectCategory
+                    options={categoryOptions}
+                    value={category}
+                    onChangeCategory={onChangeCategory}
+                    classes={classes}
+                />
                 <Slide
                     direction="down"
                     in={isCategoryChosen}
                     mountOnEnter
                     unmountOnExit
                 >
-                    <Card>
-                        <button
-                            onClick={onClearCategory}
-                            className={cnb(classes.clearButton, classes.button)}
-                        >
-                            <ArrowBack />
-                        </button>
-                        <List
-                            items={category?.devices}
-                            onChange={onChangeDetailedCategory}
-                        />
-                    </Card>
+                    <SelectDeviceModel
+                        category={category}
+                        onChangeDevice={onChangeDetailedDevice}
+                        onClearCategory={onClearCategory}
+                        classes={classes}
+                    />
                 </Slide>
                 <Slide
                     direction="down"
@@ -166,36 +173,9 @@ const Task = () => {
                     mountOnEnter
                     unmountOnExit
                 >
-                    <Card>
-                        <Grid container direction="column" alignItems="center">
-                            <Grid container item alignItems="flex-start">
-                                <Typography variant="h6">
-                                    {detailedDevice?.label}
-                                </Typography>
-                                <button
-                                    onClick={onClearDetailedDevice}
-                                    className={cnb(
-                                        classes.closeButton,
-                                        classes.button,
-                                    )}
-                                >
-                                    <Close className={classes.closeButtonIcon} />
-                                </button>
-                            </Grid>
-                            <Grid item>
-                                <img
-                                    src={detailedDevice?.img}
-                                    alt={detailedDevice?.label}
-                                    className={classes.deviceImage}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <p className={classes.deviceDetails}>
-                                    {detailedDevice?.details}
-                                </p>
-                            </Grid>
-                        </Grid>
-                    </Card>
+                    <DeviceInfo
+                        detailedDevice={detailedDevice} onClearDetailedDevice={onClearDetailedDevice} classes={classes}
+                    />
                 </Slide>
                 <TaskPlayground />
             </div>

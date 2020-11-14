@@ -4,7 +4,7 @@ const TYPE = 'ied';
 
 class IEDDevice extends AbstractDevice {
     constructor(name, model) {
-        super(name, TYPE);
+        super(name, model, TYPE);
         this.model = model;
         this.gcb = '';
         this.gooseId = '';
@@ -13,6 +13,24 @@ class IEDDevice extends AbstractDevice {
         this.vlanId = '';
         this.minTime = null;
         this.maxTime = null;
+        this.ports = [1, 2, 3];
+        this.subscriptions = [];
+
+        this.subscribeTo = this.subscribeTo.bind(this);
+        this.unsubscribeFrom = this.unsubscribeFrom.bind(this);
+    }
+
+    subscribeTo(deviceId, port) {
+        this.subscriptions.push({
+            id: deviceId,
+            port,
+        });
+    }
+
+    unsubscribeFrom(deviceId, port) {
+        this.subscriptions = this.subscriptions.filter((s) => (
+            s.id !== deviceId && s.port !== port
+        ));
     }
 }
 

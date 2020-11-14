@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { emptyFunc } from '../utils/emptyFunc';
+import { emptyFunc } from '../../utils/emptyFunc';
 
 const Form = (props) => {
     const {
