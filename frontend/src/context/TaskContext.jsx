@@ -11,6 +11,7 @@ const TaskContextProvider = (props) => {
         devices: [],
         step: 1,
         gooseConnections: {},
+        areGooseConnectionsValid: false,
     });
 
     const { pendingPort, deviceWithPendingPort } = useMemo(() => {
@@ -149,10 +150,11 @@ const TaskContextProvider = (props) => {
         });
     };
 
-    const updateGooseConnections = (connections) => {
+    const updateGooseConnections = (connections, areValid) => {
         setState((prevState) => ({
             ...prevState,
             gooseConnections: connections,
+            areGooseConnectionsValid: areValid,
         }));
     };
 

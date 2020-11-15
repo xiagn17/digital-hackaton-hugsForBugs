@@ -65,7 +65,7 @@ align-items: center;
 const AnswerButton = styled.input`
 margin: 0 10px 0 0 !important;
 `;
-const AnswerText = styled.div`
+const AnswerText = styled.label`
 font-size: 17px;
 line-height: 24px;
 color: ${props => props.withColor ? (props.isRight ? 'green' : 'red') : 'black'}
@@ -83,6 +83,7 @@ const Question = ({ data, onChangeAnswer, disabledInput, checkedAnswer, isRight,
                 return (
                     <Answer>
                         <AnswerButton
+                            id={answer.number}
                             name={question}
                             onChange={onChange}
                             value={answer.number}
@@ -91,6 +92,7 @@ const Question = ({ data, onChangeAnswer, disabledInput, checkedAnswer, isRight,
                             checked={checkedAnswer ? Number(answer.number) === Number(checkedAnswer) : null}
                         />
                         <AnswerText
+                            htmlFor={answer.number}
                             isRight={isRight && Number(answer.number) === Number(checkedAnswer)}
                             withColor={withColor && Number(answer.number) === Number(checkedAnswer)}
                         >{answer.text}</AnswerText>
@@ -225,9 +227,9 @@ const Test = () => {
                 <HeaderText>
                     {`Часть ${step}/${totalSteps}. Тест`}
                 </HeaderText>
-                <HeaderButton onClick={goHome}>
+                {isFinished && <HeaderButton onClick={goHome}>
                     Завершить
-                </HeaderButton>
+                </HeaderButton>}
             </Header>
             <Container>
                 {isFinished ? (

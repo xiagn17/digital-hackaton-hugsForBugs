@@ -112,7 +112,7 @@ const Task = () => {
     const totalSteps = 2;
 
     const {
-        state: { devices, step },
+        state: { devices, step, areGooseConnectionsValid },
         actions: { addDevice },
     } = useContext(TaskContext);
 
@@ -179,7 +179,7 @@ const Task = () => {
                     {`Часть ${step}/${totalSteps}. ${taskType} задание`}
                 </Typography>
                 <button className={classes.finishTaskButton} onClick={goHome}>
-                    Завершить задание
+                    Прервать задание
                 </button>
             </Header>
             <div className={classes.wrapper}>
@@ -217,7 +217,7 @@ const Task = () => {
                         classes={classes}
                     />
                 </Slide>
-                <TaskPlayground devices={devices} />
+                <TaskPlayground devices={devices} areGooseConnectionsValid={areGooseConnectionsValid} />
                 <Hint />
             </div>
             <TaskDetails

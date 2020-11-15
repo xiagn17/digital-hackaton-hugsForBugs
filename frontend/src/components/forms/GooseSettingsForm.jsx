@@ -168,7 +168,11 @@ const GooseSettingsForm = (props) => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        updateGooseConnections(state);
+        const { goosePorts: ports1 } = state[devices[0].id];
+        const { goosePorts: ports2 } = state[devices[1].id];
+        const isValid = Object.values(ports1).every((p, i) => p === ports2[i]);
+
+        updateGooseConnections(state, isValid);
         
         onClose();
     };
