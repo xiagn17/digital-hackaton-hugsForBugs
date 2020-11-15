@@ -225,9 +225,9 @@ const Test = () => {
                 <HeaderText>
                     {`Часть ${step}/${totalSteps}. Тест`}
                 </HeaderText>
-                <HeaderButton onClick={goHome}>
+                {isFinished && <HeaderButton onClick={goHome}>
                     Завершить
-                </HeaderButton>
+                </HeaderButton>}
             </Header>
             <Container>
                 {isFinished ? (
