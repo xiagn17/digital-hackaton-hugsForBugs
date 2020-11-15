@@ -4,6 +4,7 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import { ReactComponent as CloseIcon } from '../assets/imgs/icons/close.svg';
 
 import Card from './common/Card';
+import { SWITCH } from '../entities/device/SwitchDevice';
 
 const DeviceInfo = forwardRef((props, ref) => {
     const {
@@ -11,7 +12,12 @@ const DeviceInfo = forwardRef((props, ref) => {
         onClearDetailedDevice,
         classes,
         onAddDevice,
+        devices,
     } = props;
+
+    const btnDisabled =
+        devices.find(({ type }) => type === SWITCH) &&
+        detailedDevice?.type === SWITCH;
 
     const onAddBtnClick = () => {
         onAddDevice();
@@ -44,7 +50,11 @@ const DeviceInfo = forwardRef((props, ref) => {
                         {detailedDevice?.details}
                     </p>
                 </Grid>
-                <Button className={classes.addBtn} onClick={onAddBtnClick}>
+                <Button
+                    className={classes.addBtn}
+                    onClick={onAddBtnClick}
+                    disabled={btnDisabled}
+                >
                     Добавить
                 </Button>
             </Grid>

@@ -213,6 +213,7 @@ const Task = () => {
                         detailedDevice={detailedDevice}
                         onClearDetailedDevice={onClearDetailedDevice}
                         onAddDevice={onAddDevice}
+                        devices={devices}
                         classes={classes}
                     />
                 </Slide>
