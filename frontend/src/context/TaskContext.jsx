@@ -78,7 +78,7 @@ const TaskContextProvider = (props) => {
 
     const updateDevicesNetworkSettings = (netWorkSettingsData) => {
         setState((prevState) => {
-            const devicesCopy = prevState.devices;
+            const devicesCopy = prevState.devices.concat();
 
             for (const [deviceId, networkData] of Object.entries(
                 netWorkSettingsData,
