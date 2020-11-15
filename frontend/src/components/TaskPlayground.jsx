@@ -9,12 +9,6 @@ import GooseSettings from "./GooseSettings";
 import styled from 'styled-components';
 import { SWITCH } from '../const/deviceTypes';
 
-const boxStyle = {
-    width: 100,
-    border: 'grey solid 2px',
-    borderRadius: '10px',
-    padding: '5px',
-};
 const Container = styled.div`
 padding: 10px;
 left: 320px;
@@ -87,10 +81,10 @@ export default function TaskPlayground({ devices }) {
                         />
                     ),
             )}
-            {connections.map((c) => {
+            {connections.map((c, k) => {
                 return (
                     <Xarrow
-                        key={coordinates}
+                        key={`${coordinates}-${k}`}
                         start={c.localPortId}
                         end={c.remotePortId}
                     />

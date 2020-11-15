@@ -11,7 +11,6 @@ const boxStyle = {
 const Device = ({ setCoordinates, device, deviceIndex }) => {
     const onDrag = debounce((e, coordinates) => {
         if (device.subscriptions.length) {
-            setCoordinates(coordinates);
             setCoordinates((prevState) => {
                 const coordinatesCopy = { ...prevState };
                 const updatedCoordinates = device.subscriptions.reduce(
