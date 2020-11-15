@@ -34,7 +34,7 @@ class AbstractDevice {
             this.ports[portToUpdateIndex].status = CONNECTED;
 
             this.subscriptions.push({
-                id: device.id,
+                deviceId: device.id,
                 remotePortId,
                 localPortId: portToUpdate.id,
             });
