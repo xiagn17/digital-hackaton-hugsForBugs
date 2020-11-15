@@ -64,11 +64,10 @@ const TaskContextProvider = (props) => {
                 (device) => device.id === deviceId,
             );
 
-            const updatedDevice = {
-                ...devicesCopy[deviceToUpdateIndex],
-                ...deviceData,
-            };
-            devicesCopy[deviceToUpdateIndex] = updatedDevice;
+            devicesCopy[deviceToUpdateIndex] = Object.assign(
+                devicesCopy[deviceToUpdateIndex],
+                deviceData,
+            );
 
             return {
                 ...prevState,
