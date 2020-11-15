@@ -83,14 +83,14 @@ export default function TaskPlayground({ devices }) {
                             setCoordinates={setCoordinates}
                             key={device.id}
                             device={device}
-                            deviceIndex={i + 1}
+                            deviceIndex={ieds.indexOf(device) + 1}
                         />
                     ),
             )}
             {connections.map((c, k) => {
                 return (
                     <Xarrow
-                        key={`${coordinates}-${k}`}
+                        key={`${coordinates}-${k}-${devices.length}`}
                         start={c.localPortId}
                         end={c.remotePortId}
                     />
