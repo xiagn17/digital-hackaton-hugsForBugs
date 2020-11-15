@@ -182,7 +182,7 @@ const Test = () => {
     const [currentAnswer, setAnswer] = useState(0);
     const [isFinished, setFinished] = useState(false);
     const [radioBut, setRadioBut] = useState(null);
-    const step = 1;
+    const step = 2;
     const totalSteps = 2;
 
     const sendToServer = async (res, rightAnswersCount) => {
