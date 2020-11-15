@@ -88,10 +88,10 @@ const TaskContextProvider = (props) => {
                 );
 
                 if (deviceToUpdateIndex !== -1) {
-                    devicesCopy[deviceToUpdateIndex] = {
-                        ...devicesCopy[deviceToUpdateIndex],
+                    devicesCopy[deviceToUpdateIndex] = Object.assign(
+                        devicesCopy[deviceToUpdateIndex],
                         networkData,
-                    };
+                    );
                 }
             }
 
