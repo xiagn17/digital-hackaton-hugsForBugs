@@ -93,7 +93,7 @@ const NetworkSettingsForm = (props) => {
                 const first = device.name.slice(l - 1, l) === '1';
                 const second = device.name.slice(l - 1, l) === '2';
                 const iedNumber = first ? 'first' : (second ? 'second' : '');
-                const iedParametersForDevice = IED_PARAMETERS[iedNumber]?.FOR_CONNECTOR || {};
+                const iedParametersForDevice = IED_PARAMETERS[iedNumber];
                 return {
                     [id]: {
                         mask: iedParametersForDevice?.mask,

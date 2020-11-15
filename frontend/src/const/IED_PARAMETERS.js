@@ -7,10 +7,10 @@ const IED_PARAMETERS = {
         vlanId: '4095', // от 0 до 4095
         minTime: '4', // number 4мс должно быть
         maxTime: '1000', // nnumber 1000мс должно быть
-        FOR_CONNECTOR: {
-            ipAddress: '10.151.209.1',
-            mask: '255.255.255.0'
-        }
+
+        // FOR_CONNECTOR
+        ipAddress: '10.151.209.1',
+        mask: '255.255.255.0'
     },
     second: {
         gcb: 'GOOSE2',
@@ -20,10 +20,10 @@ const IED_PARAMETERS = {
         vlanId: '4095',
         minTime: '4', // number
         maxTime: '1000', // nnumber
-        FOR_CONNECTOR: {
-            ipAddress: '10.151.209.2',
-            mask: '255.255.255.0'
-        }
+
+        // FOR_CONNECTOR
+        ipAddress: '10.151.209.2',
+        mask: '255.255.255.0'
     },
 };
 

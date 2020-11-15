@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import styled from 'styled-components';
 import TableButton from "./common/TableButton";
 import GooseSettingsDialog from "./dialogs/GooseSettingsDialog";
+import IED_PARAMETERS from "../const/IED_PARAMETERS";
 
 const GooseAbsoluteWindow = styled.div`
 position: fixed;
@@ -47,7 +48,40 @@ const GooseSettings = (props) => {
         setGooseSettingsOpen(true);
     }
     const onGooseApply = () => {
-        console.log(devices);
+        const devicesSettings = devices
+            .filter(d => d.type === 'ied')
+            .map(({networkData, gcb, goooseId, macAddress, appId, vlanId, minTime, maxTime, name}) => {
+                const l = name.length;
+                const first = name.slice(l - 1, l) === '1';
+                const second = name.slice(l - 1, l) === '2';
+
+                return {
+                    ...networkData,
+                    gcb,
+                    goooseId,
+                    macAddress,
+                    appId,
+                    vlanId,
+                    minTime,
+                    maxTime,
+                    type: first ? 'first' : (second ? 'second' : ''),
+                };
+            }).filter(d => d.type !== '');
+        if (devicesSettings.length !== 2) {
+            console.log('nedostatochno')
+            return; // ошибкаа Недостаточно данных о двух коммутаторах
+        }
+        const isAllAnswersRight = devicesSettings.reduce((acc, settings) => {
+            const rightAnswers = IED_PARAMETERS[settings.type];
+            const isAllRight = Object.keys(rightAnswers)
+                .map(key => {
+                    return rightAnswers[key] === settings[key];
+                })
+                .filter((cur) => !cur).length === 0;
+            return acc && isAllRight;
+        }, true);
+
+        console.log('isAllAnswersRight', isAllAnswersRight);
     };
     return (
         <GooseAbsoluteWindow>
