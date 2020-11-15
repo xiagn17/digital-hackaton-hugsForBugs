@@ -62,7 +62,7 @@ line-height: 20px;
 color: #000000;
 `;
 
-const Rza220 = ({ device, deviceName }) => {
+const Rza220 = ({ device, deviceName, deviceIndex }) => {
     const {
         actions: { removeDevice, resolveConnection },
     } = useContext(TaskContext);
@@ -96,6 +96,7 @@ const Rza220 = ({ device, deviceName }) => {
                     open={open}
                     onClose={onClose}
                     device={device}
+                    deviceIndex={deviceIndex}
                 />
             </div>
             <ul className={classes.portsWrapper}>

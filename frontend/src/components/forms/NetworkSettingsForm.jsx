@@ -7,6 +7,7 @@ import Form from '../../components/common/Form';
 import IpMaskInput from '../common/IpMaskInput';
 import { IED } from '../../entities/device/IEDDevice';
 import IED_PARAMETERS from "../../const/IED_PARAMETERS";
+import TableButton from "../common/TableButton";
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -84,12 +85,12 @@ const NetworkSettingsForm = (props) => {
         defaultValues: {},
     });
 
-    useEffect(() => {
+    const completeByClick = () => {
         const objectToReset = devices
             .filter(d => d.type === 'ied')
-            .map((device) => {
-                const l = device.name.length;
+            .map((device, i) => {
                 const id = device.id;
+                const l = device.name.length;
                 const first = device.name.slice(l - 1, l) === '1';
                 const second = device.name.slice(l - 1, l) === '2';
                 const iedNumber = first ? 'first' : (second ? 'second' : '');
@@ -102,8 +103,9 @@ const NetworkSettingsForm = (props) => {
                 }
             })
             .reduce((acc, cur) => ({ ...acc, ...cur }), {});
+        console.log(objectToReset);
         reset(objectToReset);
-    }, []);
+    };
 
     const iedDevices = devices.filter(({ type }) => {
         return type === IED;
@@ -128,6 +130,9 @@ const NetworkSettingsForm = (props) => {
                     />
                 </>
             ))}
+            {iedDevices.length && (
+                <TableButton onClick={completeByClick}>Автозаполнение</TableButton>
+            )}
             <Button
                 type="submit"
                 fullWidth

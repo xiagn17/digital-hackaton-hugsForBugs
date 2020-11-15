@@ -43,6 +43,7 @@ const Device = ({ setCoordinates, device, deviceIndex }) => {
                 <device.model.component
                     device={device}
                     deviceName={deviceName}
+                    deviceIndex={deviceIndex}
                 />
             </div>
         </Draggable>

@@ -7,6 +7,7 @@ import { TaskContext } from '../../context/TaskContext';
 import Form from '../../components/common/Form';
 import IpMaskInput from '../common/IpMaskInput';
 import IED_PARAMETERS from "../../const/IED_PARAMETERS";
+import TableButton from "../common/TableButton";
 
 const useStyles = makeStyles(() => ({
     submitButton: {
@@ -36,12 +37,14 @@ const IEDSettingsForm = (props) => {
         defaultValues: device,
     });
 
-    const l = device.name.length;
-    const first = device.name.slice(l - 1, l) === '1';
-    const second = device.name.slice(l - 1, l) === '2';
-    const iedNumber = first ? 'first' : (second ? 'second' : '');
-    const iedParametersForDevice = IED_PARAMETERS[iedNumber];
-    useEffect(() => {
+
+    const completeByClick = () => {
+        const l = device.name.length;
+        const first = device.name.slice(l - 1, l) === '1';
+        const second = device.name.slice(l - 1, l) === '2';
+        const iedNumber = first ? 'first' : (second ? 'second' : '');
+        const iedParametersForDevice = IED_PARAMETERS[iedNumber];
+
         reset({
             gcb: iedParametersForDevice?.gcb || '',
             goooseId: iedParametersForDevice?.goooseId || '',
@@ -51,7 +54,7 @@ const IEDSettingsForm = (props) => {
             minTime: iedParametersForDevice?.minTime || '',
             maxTime: iedParametersForDevice?.maxTime || ''
         });
-    }, []);
+    };
 
     const updateDeviceInfo = (IEDData) => {
         updateDevice(device.id, IEDData);
@@ -159,6 +162,7 @@ const IEDSettingsForm = (props) => {
                     min: 0,
                 }}
             />
+            <TableButton onClick={completeByClick}>Автозаполнение</TableButton>
             <Button
                 type="submit"
                 fullWidth

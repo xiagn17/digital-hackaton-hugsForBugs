@@ -48,7 +48,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const IEDSettingsDialog = (props) => {
-    const { open, onClose, device } = props;
+    const { open, onClose, device, deviceIndex } = props;
 
     const classes = useStyles();
 
