@@ -34,7 +34,7 @@ const GooseApply = styled(TableButton)`
     color: #ffffff;
 `;
 const GooseSettings = (props) => {
-    const { devices } = props;
+    const { devices, areGooseConnectionsValid } = props;
     const dialog = useDialog();
     const dialog1 = useDialog();
     const [result, setResult] = useState('success');
@@ -77,7 +77,7 @@ const GooseSettings = (props) => {
             return acc && isAllRight;
         }, true);
 
-        const result = isAllAnswersRight ? 'success' : 'failure';
+        const result = isAllAnswersRight && areGooseConnectionsValid ? 'success' : 'failure';
         console.log('isAllAnswersRight', isAllAnswersRight, devicesSettings);
         setResult(result);
         dialog1.onOpen();

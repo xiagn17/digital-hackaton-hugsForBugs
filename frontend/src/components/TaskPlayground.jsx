@@ -21,7 +21,7 @@ const Container = styled.div`
     }
 `;
 
-export default function TaskPlayground({ devices }) {
+export default function TaskPlayground({ devices, areGooseConnectionsValid }) {
     const [coordinates, setCoordinates] = useState({});
     const connections = useMemo(
         () =>
@@ -96,7 +96,7 @@ export default function TaskPlayground({ devices }) {
                     />
                 );
             })}
-            {switchConnections.length >= 2 && <GooseSettings devices={ieds} />}
+            {switchConnections.length >= 2 && <GooseSettings devices={ieds} areGooseConnectionsValid={areGooseConnectionsValid} />}
         </Container>
     );
 }
