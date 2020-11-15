@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { cnb } from 'cnbuilder';
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form';
 import { Grid, Button, Checkbox, Radio, RadioGroup, FormControlLabel } from '@material-ui/core';
 
 import Form from '../../components/common/Form';
+import { TaskContext } from '../../context/TaskContext';
 
 const useStyles = makeStyles(() => ({
     table: {
@@ -55,7 +56,7 @@ const useStyles = makeStyles(() => ({
 
 export const Device = (props) => {
     const {
-        device: { id, name, ports, linkedDevices },
+        device: { id, name, goosePorts, linkedDevices },
         classes,
         value,
         onChange,
@@ -65,8 +66,8 @@ export const Device = (props) => {
         onChange((prev) => ({
             ...prev,
             [id]: {
-                ports: {
-                    ...prev[id].ports,
+                goosePorts: {
+                    ...prev[id].goosePorts,
                     [port1]: port2,
                 }
             }
@@ -94,15 +95,18 @@ export const Device = (props) => {
                     >
                         {`Выходы ${linkedDevices[0].name}`}
                     </td>
-                    {ports.map((port) => (
-                        <th key={port} className={cnb(classes.port, classes.borderBottom, classes.tableCell)}>
+                    {goosePorts.map((port) => (
+                        <th
+                            key={`input-${port}`}
+                            className={cnb(classes.port, classes.borderBottom, classes.tableCell)}
+                        >
                             {`Вход ${port}`}
                         </th>
                     ))}
                 </tr>
-                {linkedDevices[0].ports.map((port) => (
+                {linkedDevices[0].goosePorts.map((port) => (
                     <tr>
-                        <th key={port}
+                        <th key={`output-${port}`}
                             className={cnb(classes.port, classes.borderRight, classes.tableCell)}
                             align="left"
                         >
@@ -110,11 +114,11 @@ export const Device = (props) => {
                         </th>
                         <td align="center" colSpan={3}>
                             <RadioGroup
-                                value={value[id].ports[port]}
+                                value={value[id].goosePorts[port]}
                                 onChange={(e) => handleChange(port, e.target.value)}
                                 className={classes.radioGroup}
                             >
-                                {ports.map((port) => (
+                                {goosePorts.map((port) => (
                                     <FormControlLabel
                                         key={port}
                                         value={`${port}`}
@@ -134,48 +138,46 @@ export const Device = (props) => {
 const GooseSettingsForm = (props) => {
     const { devices, onClose } = props;
 
+    const { state: { gooseConnections }, actions: { updateGooseConnections } } = useContext(TaskContext);
+
     const classes = useStyles();
 
-    const [state, setState] = useState();
+    const [state, setState] = useState(gooseConnections);
+
+    useEffect(() => {
+        setState(gooseConnections);
+    }, [gooseConnections]);
 
     useEffect(() => {
         const newState = {};
+
         devices.forEach((d) => {
-            if (!newState[d.id]) {
-                newState[d.id] = {
-                    ports: {},
-                };
-            }
-            newState[d.id].ports = {
-                0: devices.port ? devices.ports[0] : null,
-                1: devices.port ? devices.ports[1] : null,
-                2: devices.port ? devices.ports[2] : null,
+            const device = {
+                goosePorts: {
+                    0: null,
+                    1: null,
+                    2: null,
+                },
             };
+            newState[d.id] = device;
         });
 
-        setState(newState)
+        setState(newState);
     }, [devices]);
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        devices.forEach((device) => {
-            const { ports } = state[device.id];
-
-            Object.keys(state).forEach((id) => {
-                if (id !== device.id) {
-                    device.subscribeTo(id, ports);
-                }
-            });
-        });
+        updateGooseConnections(state);
+        
         onClose();
     };
 
     return (
         <Form onSubmit={onSubmit}>
             <Grid container spacing={5}>
-                {devices.map((device) => (
-                    <Grid item xs={6}>
+                {Object.keys(state).length > 0 && devices.map((device) => (
+                    <Grid item xs={6} key={device.id}>
                         <Device
                             device={device}
                             classes={classes}

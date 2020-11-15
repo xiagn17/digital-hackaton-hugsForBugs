@@ -10,6 +10,7 @@ const TaskContextProvider = (props) => {
     const [state, setState] = useState({
         devices: [],
         step: 1,
+        gooseConnections: {},
     });
 
     const { pendingPort, deviceWithPendingPort } = useMemo(() => {
@@ -114,8 +115,8 @@ const TaskContextProvider = (props) => {
                 return prevState;
             }
 
-            deviceA.subscribeTo(deviceBId, deviceBPortId, deviceAPortId);
-            deviceB.subscribeTo(deviceAId, deviceAPortId, deviceBPortId);
+            deviceA.subscribeTo(deviceB, deviceBPortId, deviceAPortId);
+            deviceB.subscribeTo(deviceA, deviceAPortId, deviceBPortId);
 
             return {
                 ...prevState,
@@ -145,6 +146,13 @@ const TaskContextProvider = (props) => {
         });
     };
 
+    const updateGooseConnections = (connections) => {
+        setState((prevState) => ({
+            ...prevState,
+            gooseConnections: connections,
+        }));
+    };
+
     const resolveConnection = useCallback((deviceId, portId) => {
         if (pendingPort && deviceWithPendingPort) {
             if (deviceWithPendingPort.id === portId) {
@@ -170,6 +178,7 @@ const TaskContextProvider = (props) => {
         updateDevice,
         updateDevicesNetworkSettings,
         resolveConnection,
+        updateGooseConnections,
     };
 
     return (

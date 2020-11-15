@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Device from './Device';
 import Xarrow from 'react-xarrows';
@@ -7,6 +7,7 @@ import { IED } from '../entities/device/IEDDevice';
 import GooseSettings from "./GooseSettings";
 
 import styled from 'styled-components';
+import { SWITCH } from '../const/deviceTypes';
 
 const boxStyle = {
     width: 100,
@@ -42,6 +43,36 @@ export default function TaskPlayground({ devices }) {
         [devices],
     );
 
+    const switchConnections = useMemo(
+        () =>
+            devices
+                .filter(({ type }) => type === SWITCH)
+                .reduce(
+                    (accum, elem) =>
+                        elem.subscriptions?.length
+                            ? accum.concat(elem.subscriptions)
+                            : accum,
+                    [],
+                ),
+        [devices],
+    );
+
+    const ieds = useMemo(() => devices.filter((d) => d.type === IED), [devices, connections]);
+
+    useEffect(() => {
+        if (connections.length >= 2) {
+            connections.forEach((conn) => {
+                const device = ieds.find((d) => conn.localPortId.slice(0, -2) === d.id);
+
+                ieds.filter((d) => d.id !== conn.localPortId.slice(0, -2)).forEach((d) => {
+                    if (!(device.linkedDevices.find((ld) => ld.id === d.id))) {
+                        device.linkTo(d);
+                    }
+                });
+            });
+        }
+    }, [connections.length, ieds]);
+
     return (
         <Container
         >
@@ -65,7 +96,9 @@ export default function TaskPlayground({ devices }) {
                     />
                 );
             })}
-            <GooseSettings devices={devices}/>
+            {switchConnections.length >= 2 && (
+                <GooseSettings devices={ieds} />
+            )}
         </Container>
     );
 }
