@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import TableButton from "./common/TableButton";
 import GooseSettingsDialog from "./dialogs/GooseSettingsDialog";
 import IED_PARAMETERS from "../const/IED_PARAMETERS";
+import { useDialog } from '../hooks/useDialog';
 
 const GooseAbsoluteWindow = styled.div`
 position: fixed;
@@ -40,13 +41,10 @@ background: #2A5EA1;
 color: #FFFFFF;
 `;
 const GooseSettings = (props) => {
-    const [isGooseSettingsOpen, setGooseSettingsOpen] = useState(false);
-    const { devices, onClose } = props;
+    const { devices } = props;
+    const dialog = useDialog();
     if (devices.length === 0) return null;
 
-    const onGooseButtonClick = () => {
-        setGooseSettingsOpen(true);
-    }
     const onGooseApply = () => {
         const devicesSettings = devices
             .filter(d => d.type === 'ied')
@@ -85,9 +83,9 @@ const GooseSettings = (props) => {
     };
     return (
         <GooseAbsoluteWindow>
-            {/*<GooseSettingsDialog open={isGooseSettingsOpen} devices={devices}/>*/}
-            <GooseButton onClick={onGooseButtonClick}>Подписки GOOOSE-сообщений</GooseButton>
-            <GooseApply onClick={onGooseApply}>Отправить GOOOSE-сообщение</GooseApply>
+            <GooseSettingsDialog open={dialog.open} devices={devices} onClose={dialog.onClose} />
+            <GooseButton onClick={dialog.onOpen} >Подписки GOOOSE-сообщений</GooseButton>
+            <GooseApply onClick={onGooseApply}>Отправить GOOOSE-сообщений</GooseApply>
         </GooseAbsoluteWindow>
     );
 };

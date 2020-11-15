@@ -18,8 +18,23 @@ class IEDDevice extends AbstractDevice {
             .fill(null)
             .map((_, i) => ({ id: `${this.id}-${i}`, status: INITIAL }));
 
-        this.subscribeTo = this.subscribeTo.bind(this);
-        this.unsubscribeFrom = this.unsubscribeFrom.bind(this);
+        this.goosePorts = [0, 1, 2];
+        this.gooseConnections = [];
+
+        this.subscribeToGoose = this.subscribeTo.bind(this);
+    }
+
+    subscribeToGoose(deviceId, goosePorts) {
+        const existing = this.gooseConnections.find((s) => s.id === deviceId);
+
+        if (existing) {
+            existing.goosePorts = goosePorts;
+        } else {
+            this.gooseConnections.push({
+                id: deviceId,
+                goosePorts,
+            });
+        }
     }
 }
 

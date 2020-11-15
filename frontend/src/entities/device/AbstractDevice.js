@@ -24,7 +24,7 @@ class AbstractDevice {
         }
     }
 
-    subscribeTo(deviceId, remotePortId, localPortId) {
+    subscribeTo(device, remotePortId, localPortId) {
         const portToUpdateIndex = this.ports.findIndex(
             ({ id }) => id === localPortId,
         );
@@ -34,7 +34,7 @@ class AbstractDevice {
             this.ports[portToUpdateIndex].status = CONNECTED;
 
             this.subscriptions.push({
-                id: deviceId,
+                id: device.id,
                 remotePortId,
                 localPortId: portToUpdate.id,
             });

@@ -114,20 +114,17 @@ const categoryOptions = [
 
 const Task = () => {
     const classes = useStyles();
-    const step = 1;
     const totalSteps = 2;
+
+    const {
+        state: { devices, step },
+        actions: { addDevice },
+    } = useContext(TaskContext);
 
     const taskType = useMemo(
         () => (step === 1 ? 'Практическое' : 'Теоретическое'),
         [step],
     );
-
-    const {
-        state: { devices },
-        actions: { addDevice },
-    } = useContext(TaskContext);
-
-    const ieds = useMemo(() => devices.filter((d) => d.type === IED), [devices.length]);
 
     const [isCategoryChosen, setCategoryChosen] = useState(false);
     const [category, setCategory] = useState();
@@ -179,15 +176,6 @@ const Task = () => {
     const goHome = () => {
         history.push(Routes.home.path)
     };
-
-    useEffect(() => {
-        if (ieds.length >= 2) {
-            ieds[0].linkTo(ieds[1]);
-            console.log({
-                ieds
-            })
-        }
-    }, [ieds]);
 
     return (
         <>
