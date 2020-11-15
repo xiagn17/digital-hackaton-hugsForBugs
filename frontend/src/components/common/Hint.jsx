@@ -63,7 +63,7 @@ const Hint = (props) => {
 
     const anchorEl = useRef();
 
-    const { hint } = useHint(0);
+    const { hint } = useHint(Math.floor(Math.random() * 7));
 
     return (
         <>
