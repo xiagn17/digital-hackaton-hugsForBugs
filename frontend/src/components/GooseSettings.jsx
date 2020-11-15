@@ -44,12 +44,12 @@ const GooseSettings = (props) => {
     const onGooseApply = () => {
         const devicesSettings = devices
             .filter(d => d.type === 'ied')
-            .map(({networkData, gcb, goooseId, macAddress, appId, vlanId, minTime, maxTime, name}) => {
+            .map(({networkData, ipAddress: ipAddressA, mask: maskA, gcb, goooseId, macAddress, appId, vlanId, minTime, maxTime, name}) => {
                 const l = name.length;
                 const first = name.slice(l - 1, l) === '1';
                 const second = name.slice(l - 1, l) === '2';
-                const ipAddress = networkData?.ipAddress || undefined;
-                const mask = networkData?.mask || undefined;
+                const ipAddress = networkData?.ipAddress || ipAddressA || undefined;
+                const mask = networkData?.mask || maskA || undefined;
                 return {
                     ipAddress,
                     mask,
@@ -78,7 +78,7 @@ const GooseSettings = (props) => {
         }, true);
 
         const result = isAllAnswersRight ? 'success' : 'failure';
-        console.log('isAllAnswersRight', isAllAnswersRight);
+        console.log('isAllAnswersRight', isAllAnswersRight, devicesSettings);
         setResult(result);
         dialog1.onOpen();
     };
