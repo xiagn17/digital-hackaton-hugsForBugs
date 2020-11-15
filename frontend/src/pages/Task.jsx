@@ -105,11 +105,6 @@ const categoryOptions = [
         value: 2,
         devices: SWITCHER_MODELS,
     },
-    {
-        label: 'Подключения',
-        value: 3,
-        devices: [],
-    },
 ];
 
 const Task = () => {
