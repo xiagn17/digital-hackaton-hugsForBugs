@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form';
 import { Typography, TextField, Button } from '@material-ui/core';
@@ -6,6 +6,7 @@ import { Typography, TextField, Button } from '@material-ui/core';
 import Form from '../../components/common/Form';
 import IpMaskInput from '../common/IpMaskInput';
 import { IED } from '../../entities/device/IEDDevice';
+import IED_PARAMETERS from "../../const/IED_PARAMETERS";
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -50,9 +51,9 @@ const Device = (props) => {
                 required
                 className={classes.textField}
                 inputProps={{ className: classes.input }}
-                InputProps={{
-                    inputComponent: IpMaskInput,
-                }}
+                // InputProps={{
+                //     inputComponent: IpMaskInput,
+                // }}
             />
             <Controller
                 as={TextField}
@@ -66,9 +67,9 @@ const Device = (props) => {
                 required
                 className={classes.textField}
                 inputProps={{ className: classes.input }}
-                InputProps={{
-                    inputComponent: IpMaskInput,
-                }}
+                // InputProps={{
+                //     inputComponent: IpMaskInput,
+                // }}
             />
         </div>
     );
@@ -79,9 +80,30 @@ const NetworkSettingsForm = (props) => {
 
     const classes = useStyles();
 
-    const { handleSubmit: onSubmitForm, control } = useForm({
+    const { handleSubmit: onSubmitForm, control, reset } = useForm({
         defaultValues: {},
     });
+
+    useEffect(() => {
+        const objectToReset = devices
+            .filter(d => d.type === 'ied')
+            .map((device) => {
+                const l = device.name.length;
+                const id = device.id;
+                const first = device.name.slice(l - 1, l) === '1';
+                const second = device.name.slice(l - 1, l) === '2';
+                const iedNumber = first ? 'first' : (second ? 'second' : '');
+                const iedParametersForDevice = IED_PARAMETERS[iedNumber]?.FOR_CONNECTOR || {};
+                return {
+                    [id]: {
+                        mask: iedParametersForDevice?.mask,
+                        ipAddress: iedParametersForDevice?.ipAddress
+                    }
+                }
+            })
+            .reduce((acc, cur) => ({ ...acc, ...cur }), {});
+        reset(objectToReset);
+    }, []);
 
     const iedDevices = devices.filter(({ type }) => {
         return type === IED;
