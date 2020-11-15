@@ -179,7 +179,7 @@ const Task = () => {
                     {`Часть ${step}/${totalSteps}. ${taskType} задание`}
                 </Typography>
                 <button className={classes.finishTaskButton} onClick={goHome}>
-                    Завершить задание
+                    Прервать задание
                 </button>
             </Header>
             <div className={classes.wrapper}>
