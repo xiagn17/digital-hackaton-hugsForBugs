@@ -46,11 +46,14 @@ const GooseSettings = (props) => {
     const onGooseButtonClick = () => {
         setGooseSettingsOpen(true);
     }
+    const onGooseApply = () => {
+        console.log(devices);
+    };
     return (
         <GooseAbsoluteWindow>
             {/*<GooseSettingsDialog open={isGooseSettingsOpen} devices={devices}/>*/}
             <GooseButton onClick={onGooseButtonClick}>Подписки GOOOSE-сообщений</GooseButton>
-            <GooseApply>Отправить GOOOSE-сообщение</GooseApply>
+            <GooseApply onClick={onGooseApply}>Отправить GOOOSE-сообщение</GooseApply>
         </GooseAbsoluteWindow>
     );
 };

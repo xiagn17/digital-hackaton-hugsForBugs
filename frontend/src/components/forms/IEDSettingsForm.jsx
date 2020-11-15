@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button } from '@material-ui/core';
@@ -6,6 +6,7 @@ import { TaskContext } from '../../context/TaskContext';
 
 import Form from '../../components/common/Form';
 import IpMaskInput from '../common/IpMaskInput';
+import IED_PARAMETERS from "../../const/IED_PARAMETERS";
 
 const useStyles = makeStyles(() => ({
     submitButton: {
@@ -31,9 +32,26 @@ const IEDSettingsForm = (props) => {
 
     const classes = useStyles();
 
-    const { handleSubmit: onSubmitForm, control } = useForm({
+    const { handleSubmit: onSubmitForm, control, reset } = useForm({
         defaultValues: device,
     });
+
+    const l = device.name.length;
+    const first = device.name.slice(l - 1, l) === '1';
+    const second = device.name.slice(l - 1, l) === '2';
+    const iedNumber = first ? 'first' : (second ? 'second' : '');
+    const iedParametersForDevice = IED_PARAMETERS[iedNumber];
+    useEffect(() => {
+        reset({
+            gcb: iedParametersForDevice?.gcb || '',
+            goooseId: iedParametersForDevice?.goooseId || '',
+            macAddress: iedParametersForDevice?.macAddress || '',
+            appId: iedParametersForDevice?.appId || '',
+            vlanId: iedParametersForDevice?.vlanId || '',
+            minTime: iedParametersForDevice?.minTime || '',
+            maxTime: iedParametersForDevice?.maxTime || ''
+        });
+    }, []);
 
     const updateDeviceInfo = (IEDData) => {
         updateDevice(device.id, IEDData);
@@ -80,9 +98,6 @@ const IEDSettingsForm = (props) => {
                 required
                 className={classes.textField}
                 inputProps={{ className: classes.input }}
-                InputProps={{
-                    inputComponent: IpMaskInput,
-                }}
             />
             <Controller
                 as={TextField}
