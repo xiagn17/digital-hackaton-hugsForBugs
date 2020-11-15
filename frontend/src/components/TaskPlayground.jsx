@@ -1,24 +1,24 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Device from './Device';
 import Xarrow from 'react-xarrows';
 import { IED } from '../entities/device/IEDDevice';
 
-import GooseSettings from "./GooseSettings";
+import GooseSettings from './GooseSettings';
 
 import styled from 'styled-components';
 import { SWITCH } from '../const/deviceTypes';
 
 const Container = styled.div`
-padding: 10px;
-left: 320px;
-width: calc(100% - 320px);
-height: calc(100% - 70px);
-position: absolute;
-& > div:not(:last-child) {
-position: relative;
-z-index: 100;
-}
+    padding: 10px;
+    left: 320px;
+    width: calc(100% - 320px);
+    height: calc(100% - 70px);
+    position: absolute;
+    & > div:not(:last-child) {
+        position: relative;
+        z-index: 100;
+    }
 `;
 
 export default function TaskPlayground({ devices }) {
@@ -51,15 +51,22 @@ export default function TaskPlayground({ devices }) {
         [devices],
     );
 
-    const ieds = useMemo(() => devices.filter((d) => d.type === IED), [devices, connections]);
+    const ieds = useMemo(() => devices.filter((d) => d.type === IED), [
+        devices,
+        connections,
+    ]);
 
     useEffect(() => {
         if (connections.length >= 2) {
             connections.forEach((conn) => {
-                const device = ieds.find((d) => conn.localPortId.slice(0, -2) === d.id);
+                const device = ieds.find(
+                    (d) => conn.localPortId.slice(0, -2) === d.id,
+                );
 
-                ieds.filter((d) => d.id !== conn.localPortId.slice(0, -2)).forEach((d) => {
-                    if (!(device.linkedDevices.find((ld) => ld.id === d.id))) {
+                ieds.filter(
+                    (d) => d.id !== conn.localPortId.slice(0, -2),
+                ).forEach((d) => {
+                    if (!device.linkedDevices.find((ld) => ld.id === d.id)) {
                         device.linkTo(d);
                     }
                 });
@@ -68,8 +75,7 @@ export default function TaskPlayground({ devices }) {
     }, [connections.length, ieds]);
 
     return (
-        <Container
-        >
+        <Container>
             {devices.map(
                 (device, i) =>
                     device?.model?.component && (
@@ -90,9 +96,7 @@ export default function TaskPlayground({ devices }) {
                     />
                 );
             })}
-            {switchConnections.length >= 2 && (
-                <GooseSettings devices={ieds} />
-            )}
+            {switchConnections.length >= 2 && <GooseSettings devices={ieds} />}
         </Container>
     );
 }

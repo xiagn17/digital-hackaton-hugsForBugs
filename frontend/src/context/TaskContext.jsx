@@ -46,6 +46,10 @@ const TaskContextProvider = (props) => {
             );
             devicesCopy.splice(deviceToDeleteIndex, 1);
 
+            devicesCopy.forEach((d) => {
+                d.unsubscribeFrom(deviceId);
+            });
+
             return {
                 ...prevState,
                 devices: devicesCopy,
@@ -153,24 +157,27 @@ const TaskContextProvider = (props) => {
         }));
     };
 
-    const resolveConnection = useCallback((deviceId, portId) => {
-        if (pendingPort && deviceWithPendingPort) {
-            if (deviceWithPendingPort.id === portId) {
-                updatePortStatusOfDevice(deviceId, portId, INITIAL);
-            } else if (deviceId === deviceWithPendingPort.id) {
-                updatePortStatusOfDevice(deviceId, pendingPort.id, INITIAL);
+    const resolveConnection = useCallback(
+        (deviceId, portId) => {
+            if (pendingPort && deviceWithPendingPort) {
+                if (deviceWithPendingPort.id === portId) {
+                    updatePortStatusOfDevice(deviceId, portId, INITIAL);
+                } else if (deviceId === deviceWithPendingPort.id) {
+                    updatePortStatusOfDevice(deviceId, pendingPort.id, INITIAL);
+                } else {
+                    connectDevices(
+                        deviceId,
+                        portId,
+                        deviceWithPendingPort.id,
+                        pendingPort.id,
+                    );
+                }
             } else {
-                connectDevices(
-                    deviceId,
-                    portId,
-                    deviceWithPendingPort.id,
-                    pendingPort.id,
-                );
+                updatePortStatusOfDevice(deviceId, portId);
             }
-        } else {
-            updatePortStatusOfDevice(deviceId, portId);
-        }
-    }, [state.devices]);
+        },
+        [state.devices],
+    );
 
     const actions = {
         addDevice,

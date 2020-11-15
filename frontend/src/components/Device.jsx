@@ -6,6 +6,7 @@ import { debounce } from 'lodash';
 const boxStyle = {
     width: 100,
     height: 100,
+    zIndex: 0
 };
 
 const Device = ({ setCoordinates, device, deviceIndex }) => {
@@ -28,7 +29,10 @@ const Device = ({ setCoordinates, device, deviceIndex }) => {
         }
     }, 0);
 
-    const deviceName = deviceIndex > 0 && device.type === 'ied' ? device.type.toUpperCase() + deviceIndex : null;
+    const deviceName =
+        deviceIndex > 0 && device.type === 'ied'
+            ? device.type.toUpperCase() + deviceIndex
+            : null;
     return (
         <Draggable
             onDrag={onDrag}
@@ -36,7 +40,10 @@ const Device = ({ setCoordinates, device, deviceIndex }) => {
             defaultPosition={{ x: 400, y: 200 }}
         >
             <div style={boxStyle} className="box" id={device.id}>
-                <device.model.component device={device} deviceName={deviceName} />
+                <device.model.component
+                    device={device}
+                    deviceName={deviceName}
+                />
             </div>
         </Draggable>
     );

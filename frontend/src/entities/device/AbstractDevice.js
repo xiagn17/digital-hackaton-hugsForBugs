@@ -43,14 +43,16 @@ class AbstractDevice {
 
     unsubscribeFrom(deviceId, remotePortId) {
         const subscribtionToDeleteIndex = this.subscriptions.findIndex(
-            (s) => s.deviceId === deviceId && s.remotePortId === remotePortId,
+            (s) =>
+                s.deviceId === deviceId &&
+                (!remotePortId || s.remotePortId === remotePortId),
         );
 
         const sToDelete = this.subscriptions[subscribtionToDeleteIndex];
 
         if (sToDelete) {
             this.updatePortStatus(sToDelete.localPortId, INITIAL);
-            this.subscriptions.concat(subscribtionToDeleteIndex, 1);
+            this.subscriptions.splice(subscribtionToDeleteIndex, 1);
         }
     }
 
