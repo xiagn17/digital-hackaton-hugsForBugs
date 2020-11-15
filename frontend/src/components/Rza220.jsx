@@ -53,7 +53,7 @@ const useStyles = makeStyles(() => ({
 const DeviceName = styled.div`
 position:absolute;
 top: -25px;
-right: -15px;
+left: 50%;
 z-index: 100;
 font-style: normal;
 font-weight: normal;
